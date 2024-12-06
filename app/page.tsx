@@ -1,15 +1,19 @@
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export default function Home() {
   return (
     <div className="flex h-screen max-h-screen">
       <nav className="absolute top-7 right-24 flex space-x-6">
-        <a href="/login" className="text-sm font-medium text-white">
+        <Link href="/login" className="text-sm font-medium text-white">
           Login
-        </a>
-        <a href="/?admin=true" className="text-sm font-medium text-orange-600">
+        </Link>
+        <Link
+          href="/?admin=true"
+          className="text-sm font-medium text-orange-600"
+        >
           Admin
-        </a>
+        </Link>
       </nav>
 
       <section className="container my-auto remove-scrollbar">
