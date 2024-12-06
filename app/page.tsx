@@ -29,9 +29,11 @@ export default function Home() {
             all-in-one app streamlines scheduling, client tracking, and session
             management, helping you stay organized and focus on your success.
           </p>
-          <Button className="bg-orange-600 text-white hover:bg-orange-500 mt-7">
-            Get Started
-          </Button>
+          <Link href="/register">
+            <Button className="bg-orange-600 text-white hover:bg-orange-500 mt-7">
+              Get Started
+            </Button>
+          </Link>
         </div>
 
         <div className="max-w-[496px] sub-container text-14-regular">
