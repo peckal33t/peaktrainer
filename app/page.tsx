@@ -30,7 +30,10 @@ export default function Home() {
             management, helping you stay organized and focus on your success.
           </p>
           <Link href="/register">
-            <Button className="bg-orange-600 text-white hover:bg-orange-500 mt-7">
+            <Button
+              type="button"
+              className="bg-orange-600 text-white hover:bg-orange-500 mt-7"
+            >
               Get Started
             </Button>
           </Link>
