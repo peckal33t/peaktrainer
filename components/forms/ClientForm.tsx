@@ -44,8 +44,17 @@ const ClientForm = () => {
     },
   });
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
-    console.log(values);
+  const onSubmit = async ({
+    name,
+    email,
+    phone,
+  }: z.infer<typeof formSchema>) => {
+    setIsLoading(true);
+
+    try {
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   return (
