@@ -1,4 +1,3 @@
-import ClientForm from "@/components/forms/ClientForm";
 import Link from "next/link";
 
 const RegisterPage = () => {
@@ -15,17 +14,6 @@ const RegisterPage = () => {
           Admin
         </Link>
       </nav>
-
-      <section className="container my-auto">
-        <div className="max-w-[496px] sub-container space-y-8">
-          <Link href="/">
-            <h1 className="text-xl">
-              Peak<span className="text-orange-500">Trainer</span>
-            </h1>
-          </Link>
-          <ClientForm />
-        </div>
-      </section>
     </div>
   );
 };
