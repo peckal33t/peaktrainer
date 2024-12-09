@@ -14,6 +14,8 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import CustomButton from "../CustomButton";
+import { useState } from "react";
 
 const formSchema = z.object({
   name: z.string().min(3, {
@@ -31,6 +33,8 @@ const formSchema = z.object({
 });
 
 const ClientForm = () => {
+  const [isLoading, setIsLoading] = useState(false);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -105,12 +109,7 @@ const ClientForm = () => {
         </div>
       </form>
 
-      <Button
-        type="button"
-        className="w-full bg-orange-600 text-white hover:bg-orange-500 mt-7"
-      >
-        Get Started
-      </Button>
+      <CustomButton isLoading={isLoading}>Get Started</CustomButton>
     </Form>
   );
 };
