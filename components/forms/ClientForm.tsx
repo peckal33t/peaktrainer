@@ -16,8 +16,8 @@ import {
 import { Input } from "@/components/ui/input";
 
 const formSchema = z.object({
-  username: z.string().min(2, {
-    message: "Username must be at least 2 characters.",
+  name: z.string().min(3, {
+    message: "Name must be at least 3 characters.",
   }),
 });
 
@@ -25,7 +25,7 @@ const ClientForm = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      username: "",
+      name: "",
     },
   });
 
@@ -35,20 +35,26 @@ const ClientForm = () => {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 flex-1">
+        <section className="mb-12 space-y-4">
+          <h1 className="text-xl">Hello!</h1>
+        </section>
         <FormField
           control={form.control}
-          name="username"
+          name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Username</FormLabel>
+              <FormLabel>Name</FormLabel>
               <FormControl>
-                <Input placeholder="shadcn" {...field} />
+                <Input placeholder="Your name" {...field} />
               </FormControl>
-              <FormDescription>
-                This is your public display name.
-              </FormDescription>
-              <FormMessage />
+              <FormMessage className="shad-error" />
+
+              <FormLabel>Email</FormLabel>
+              <FormControl>
+                <Input placeholder="Your email" {...field} />
+              </FormControl>
+              <FormMessage className="shad-error" />
             </FormItem>
           )}
         />

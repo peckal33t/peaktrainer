@@ -1,10 +1,13 @@
 import ClientForm from "@/components/forms/ClientForm";
-import React from "react";
 
 const RegisterPage = () => {
   return (
-    <div>
-      <ClientForm />
+    <div className="flex h-screen max-h-screen">
+      <section className="container my-auto">
+        <div className="max-w-[496px] sub-container">
+          <ClientForm />
+        </div>
+      </section>
     </div>
   );
 };
