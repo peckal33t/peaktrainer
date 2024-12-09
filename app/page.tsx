@@ -34,7 +34,7 @@ export default function Home() {
           <Link href="/register">
             <Button
               type="button"
-              className="bg-orange-600 text-white hover:bg-orange-500 mt-7"
+              className="w-full bg-orange-600 text-white hover:bg-orange-500 mt-7"
             >
               Get Started
             </Button>

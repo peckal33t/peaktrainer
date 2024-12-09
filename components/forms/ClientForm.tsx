@@ -22,6 +22,12 @@ const formSchema = z.object({
   email: z.string().email({
     message: "Please enter a valid email address.",
   }),
+  phone: z
+    .string()
+    .refine(
+      (value) => /^\+\d{10,15}$/.test(value),
+      "Please enter a valid phone number."
+    ),
 });
 
 const ClientForm = () => {
@@ -30,6 +36,7 @@ const ClientForm = () => {
     defaultValues: {
       name: "",
       email: "",
+      phone: "",
     },
   });
 
@@ -73,6 +80,25 @@ const ClientForm = () => {
                   <Input
                     placeholder="Your email"
                     {...field}
+                    className="form-input shad-input border-0"
+                  />
+                </FormControl>
+                <FormMessage className="shad-error" />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="phone"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Phone</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="Your phone number"
+                    {...field}
+                    onChange={field.onChange}
                     className="form-input shad-input border-0"
                   />
                 </FormControl>
