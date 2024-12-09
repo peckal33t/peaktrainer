@@ -34,15 +34,6 @@ export default function Home() {
           </p>
           <br />
           <ClientForm />
-
-          <Link href="/register">
-            <Button
-              type="button"
-              className="w-full bg-orange-600 text-white hover:bg-orange-500 mt-7"
-            >
-              Get Started
-            </Button>
-          </Link>
         </div>
 
         <div className="max-w-[496px] sub-container text-14-regular">
