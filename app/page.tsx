@@ -1,3 +1,4 @@
+import ClientForm from "@/components/forms/ClientForm";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
@@ -31,6 +32,9 @@ export default function Home() {
             all-in-one app streamlines scheduling, client tracking, and session
             management, helping you stay organized and focus on your success.
           </p>
+          <br />
+          <ClientForm />
+
           <Link href="/register">
             <Button
               type="button"

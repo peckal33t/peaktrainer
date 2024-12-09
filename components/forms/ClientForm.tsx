@@ -47,10 +47,6 @@ const ClientForm = () => {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 flex-1">
-        <section className="mb-12 space-y-4">
-          <h1 className="text-xl">Personal Information</h1>
-        </section>
-
         <div className="space-y-4">
           <FormField
             control={form.control}
@@ -107,8 +103,6 @@ const ClientForm = () => {
             )}
           />
         </div>
-
-        <Button type="submit">Submit</Button>
       </form>
     </Form>
   );
