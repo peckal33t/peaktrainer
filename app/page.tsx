@@ -18,9 +18,11 @@ export default function Home() {
 
       <section className="container my-auto remove-scrollbar">
         <div className="max-w-[496px] sub-container">
-          <h1 className="text-xl">
-            Peak<span className="text-orange-500">Trainer</span>
-          </h1>
+          <Link href="/">
+            <h1 className="text-xl">
+              Peak<span className="text-orange-500">Trainer</span>
+            </h1>
+          </Link>
         </div>
 
         <div className="max-w-[496px] sub-container">

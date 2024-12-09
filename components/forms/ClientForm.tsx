@@ -46,13 +46,21 @@ const ClientForm = () => {
             <FormItem>
               <FormLabel>Name</FormLabel>
               <FormControl>
-                <Input placeholder="Your name" {...field} />
+                <Input
+                  placeholder="Your name"
+                  {...field}
+                  className="form-input shad-input border-0"
+                />
               </FormControl>
               <FormMessage className="shad-error" />
 
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input placeholder="Your email" {...field} />
+                <Input
+                  placeholder="Your email"
+                  {...field}
+                  className="form-input shad-input border-0"
+                />
               </FormControl>
               <FormMessage className="shad-error" />
             </FormItem>
