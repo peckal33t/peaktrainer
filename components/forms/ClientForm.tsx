@@ -16,6 +16,8 @@ import {
 import { Input } from "@/components/ui/input";
 import CustomButton from "../CustomButton";
 import { useState } from "react";
+import { createUser } from "@/lib/service/client";
+import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
   name: z.string().min(3, {
@@ -33,6 +35,7 @@ const formSchema = z.object({
 });
 
 const ClientForm = () => {
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -44,17 +47,44 @@ const ClientForm = () => {
     },
   });
 
-  const onSubmit = async ({
-    name,
-    email,
-    phone,
-  }: z.infer<typeof formSchema>) => {
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setIsLoading(true);
 
     try {
-    } catch (err) {
-      console.error(err);
+      console.log("Environment Variables:");
+      console.log("NEXT_PUBLIC_ENDPOINT:", process.env.NEXT_PUBLIC_ENDPOINT);
+      console.log(
+        "NEXT_PUBLIC_PROJECT_ID:",
+        process.env.NEXT_PUBLIC_PROJECT_ID
+      );
+      console.log("NEXT_PUBLIC_API_KEY:", process.env.NEXT_PUBLIC_API_KEY);
+
+      const endpoint = process.env.NEXT_PUBLIC_ENDPOINT;
+      const projectId = process.env.NEXT_PUBLIC_PROJECT_ID;
+      const apiKey = process.env.NEXT_PUBLIC_API_KEY;
+
+      if (!endpoint || !projectId || !apiKey) {
+        throw new Error("Missing required environment variables");
+      }
+
+      const user = {
+        name: values.name,
+        email: values.email,
+        phone: values.phone,
+      };
+
+      const createNewUser = await createUser(user);
+
+      if (createNewUser) {
+        router.push(`/clients/${createNewUser.$id}/register`);
+      } else {
+        console.error("User creation failed or returned an invalid response.");
+      }
+    } catch (error) {
+      console.error("Error in onSubmit:", error);
     }
+
+    setIsLoading(false);
   };
 
   return (
@@ -116,9 +146,8 @@ const ClientForm = () => {
             )}
           />
         </div>
+        <CustomButton isLoading={isLoading}>Get Started</CustomButton>
       </form>
-
-      <CustomButton isLoading={isLoading}>Get Started</CustomButton>
     </Form>
   );
 };
