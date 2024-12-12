@@ -1,3 +1,4 @@
+import RegisterForm from "@/components/forms/RegisterForm";
 import Link from "next/link";
 
 const RegisterPage = () => {
@@ -24,14 +25,10 @@ const RegisterPage = () => {
           </Link>
         </div>
 
-        {/* <div className="max-w-[496px] sub-container">
-          <p>
-            Take charge of your training business with PeakTrainer. This
-            all-in-one app streamlines scheduling, client tracking, and session
-            management, helping you stay organized and focus on your success.
-          </p>
+        <div className="max-w-[496px] sub-container">
           <br />
-        </div> */}
+          <RegisterForm />
+        </div>
 
         <div className="max-w-[496px] sub-container text-14-regular">
           <p className="text-dark-600 xl:text-left">
