@@ -29,7 +29,7 @@ const formSchema = z.object({
   phone: z
     .string()
     .refine(
-      (value) => /^\+\d{10,15}$/.test(value),
+      (value) => /^\+46\s?\d{2}\s?\d{3}\s?\d{2}\s?\d{2}$/.test(value),
       "Please enter a valid phone number."
     ),
 });
