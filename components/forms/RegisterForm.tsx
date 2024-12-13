@@ -196,11 +196,11 @@ const RegisterForm = ({ user }: { user: User }) => {
                       onValueChange={field.onChange}
                       defaultValue={field.value}
                     >
-                      {GenderSelect.map((gender, index) => (
-                        <div key={gender} className="radio-group">
-                          <RadioGroupItem value={gender} id={gender} />
-                          <Label htmlFor={gender} className="cursor-pointer">
-                            {gender}
+                      {GenderSelect.map((index) => (
+                        <div key={index} className="radio-group">
+                          <RadioGroupItem value={index} id={index} />
+                          <Label htmlFor={index} className="cursor-pointer">
+                            {index}
                           </Label>
                         </div>
                       ))}
