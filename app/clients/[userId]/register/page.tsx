@@ -1,7 +1,10 @@
 import RegisterForm from "@/components/forms/RegisterForm";
+import { getUser } from "@/lib/service/client";
 import Link from "next/link";
 
-const RegisterPage = () => {
+const RegisterPage = async ({ params: { userId } }: SearchParamProps) => {
+  const user = await getUser(userId);
+
   return (
     <div className="flex h-screen max-h-screen">
       <nav className="absolute top-7 right-24 flex space-x-6">
@@ -26,8 +29,9 @@ const RegisterPage = () => {
         </div>
 
         <div className="max-w-[496px] sub-container">
+          <h1 className="text-lg">Personal Information</h1>
           <br />
-          <RegisterForm />
+          <RegisterForm user={user} />
         </div>
 
         <div className="max-w-[496px] sub-container text-14-regular">

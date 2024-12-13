@@ -16,13 +16,23 @@ export const createUser = async (user: CreateUserParams) => {
 
     return parseStringify(newUser);
   } catch (err: any) {
-    console.error("Error creating user:", err); // Log error for debugging
+    console.error("Error creating user:", err);
     if (err.code === 409) {
       const docs = await appwriteUsers.list([
         Query.equal("email", [user.email]),
       ]);
       return docs.users[0];
     }
-    throw new Error("Failed to create user."); // Re-throw error for upstream handling
+    throw new Error("Failed to create user.");
+  }
+};
+
+export const getUser = async (userId: string) => {
+  try {
+    const user = await appwriteUsers.get(userId);
+
+    return parseStringify(user);
+  } catch (err) {
+    console.error(err);
   }
 };
