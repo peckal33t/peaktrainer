@@ -98,40 +98,24 @@ const RegisterForm = ({ user }: { user: User }) => {
   };
 
   return (
-    <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-12 flex-1"
-      >
-        <div className="space-y-4">
-          <FormField
-            control={form.control}
-            name="name"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Name</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="Your name"
-                    {...field}
-                    className="form-input shad-input border-0"
-                  />
-                </FormControl>
-                <FormMessage className="shad-error" />
-              </FormItem>
-            )}
-          />
-
-          <div className="flex flex-col xl:flex-row gap-6">
+    <div className="max-w-[496px] sub-container">
+      <h1 className="text-lg">Personal Information</h1>
+      <br />
+      <Form {...form}>
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="space-y-12 flex-1"
+        >
+          <div className="space-y-4">
             <FormField
               control={form.control}
-              name="email"
+              name="name"
               render={({ field }) => (
-                <FormItem className="flex-1">
-                  <FormLabel>Email</FormLabel>
+                <FormItem>
+                  <FormLabel>Name</FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="Your email"
+                      placeholder="Your name"
                       {...field}
                       className="form-input shad-input border-0"
                     />
@@ -141,80 +125,106 @@ const RegisterForm = ({ user }: { user: User }) => {
               )}
             />
 
-            <FormField
-              control={form.control}
-              name="phone"
-              render={({ field }) => (
-                <FormItem className="flex-1">
-                  <FormLabel>Phone</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="Your phone number"
-                      {...field}
-                      className="form-input shad-input border-0"
-                    />
-                  </FormControl>
-                  <FormMessage className="shad-error" />
-                </FormItem>
-              )}
-            />
-          </div>
-
-          <div className="flex flex-col gap-6 xl:flex-row">
-            <FormField
-              control={form.control}
-              name="birthDate"
-              render={({ field }) => (
-                <FormItem className="flex-1">
-                  <FormLabel>Birth Date</FormLabel>
-                  <FormControl>
-                    <div className="flex rounded border border-dark-500 bg-dark-400 items-center">
-                      <Calendar height={20} width={20} className="ml-2 mb-1" />
-                      <DatePicker
-                        selected={field.value}
-                        onChange={(date: Date | null) => field.onChange(date)}
-                        dateFormat="MM/dd/yyyy"
-                        className="date-picker form-input shad-input border-0 cursor-pointer"
-                        placeholderText="Select date"
+            <div className="flex flex-col xl:flex-row gap-6">
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem className="flex-1">
+                    <FormLabel>Email</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Your email"
+                        {...field}
+                        className="form-input shad-input border-0"
                       />
-                    </div>
-                  </FormControl>
-                  <FormMessage className="shad-error" />
-                </FormItem>
-              )}
-            />
+                    </FormControl>
+                    <FormMessage className="shad-error" />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="phone"
+                render={({ field }) => (
+                  <FormItem className="flex-1">
+                    <FormLabel>Phone</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Your phone number"
+                        {...field}
+                        className="form-input shad-input border-0"
+                      />
+                    </FormControl>
+                    <FormMessage className="shad-error" />
+                  </FormItem>
+                )}
+              />
+            </div>
 
-            <FormField
-              control={form.control}
-              name="gender"
-              render={({ field }) => (
-                <FormItem className="flex-1">
-                  <FormLabel>Gender</FormLabel>
-                  <FormControl>
-                    <RadioGroup
-                      className="flex h-11 gap-6 xl:justify-between"
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      {GenderSelect.map((index) => (
-                        <div key={index} className="radio-group">
-                          <RadioGroupItem value={index} id={index} />
-                          <Label htmlFor={index} className="cursor-pointer">
-                            {index}
-                          </Label>
-                        </div>
-                      ))}
-                    </RadioGroup>
-                  </FormControl>
-                  <FormMessage className="shad-error" />
-                </FormItem>
-              )}
-            />
+            <div className="flex flex-col gap-6 xl:flex-row">
+              <FormField
+                control={form.control}
+                name="birthDate"
+                render={({ field }) => (
+                  <FormItem className="flex-1">
+                    <FormLabel>Birth Date</FormLabel>
+                    <FormControl>
+                      <div className="flex rounded border border-dark-500 bg-dark-400 items-center">
+                        <Calendar
+                          height={20}
+                          width={20}
+                          className="ml-2 mb-1"
+                        />
+                        <DatePicker
+                          selected={field.value}
+                          onChange={(date: Date | null) => field.onChange(date)}
+                          dateFormat="MM/dd/yyyy"
+                          className="date-picker form-input shad-input border-0 cursor-pointer"
+                          placeholderText="Select date"
+                        />
+                      </div>
+                    </FormControl>
+                    <FormMessage className="shad-error" />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="gender"
+                render={({ field }) => (
+                  <FormItem className="flex-1">
+                    <FormLabel>Gender</FormLabel>
+                    <FormControl>
+                      <RadioGroup
+                        className="flex h-11 gap-6 xl:justify-between"
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        {GenderSelect.map((index) => (
+                          <div key={index} className="radio-group">
+                            <RadioGroupItem value={index} id={index} />
+                            <Label htmlFor={index} className="cursor-pointer">
+                              {index}
+                            </Label>
+                          </div>
+                        ))}
+                      </RadioGroup>
+                    </FormControl>
+                    <FormMessage className="shad-error" />
+                  </FormItem>
+                )}
+              />
+            </div>
           </div>
-        </div>
-        <CustomButton isLoading={isLoading}>Get Started</CustomButton>
-      </form>
-    </Form>
+
+          {/* Trainer Information Section */}
+          {/*  */}
+
+          <CustomButton isLoading={isLoading}>Get Started</CustomButton>
+        </form>
+      </Form>
+    </div>
   );
 };
 

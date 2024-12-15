@@ -28,11 +28,7 @@ const RegisterPage = async ({ params: { userId } }: SearchParamProps) => {
           </Link>
         </div>
 
-        <div className="max-w-[496px] sub-container">
-          <h1 className="text-lg">Personal Information</h1>
-          <br />
-          <RegisterForm user={user} />
-        </div>
+        <RegisterForm user={user} />
 
         <div className="max-w-[496px] sub-container text-14-regular">
           <p className="text-dark-600 xl:text-left">
