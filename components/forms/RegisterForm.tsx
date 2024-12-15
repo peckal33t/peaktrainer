@@ -19,11 +19,18 @@ import { useState } from "react";
 import { createUser } from "@/lib/service/client";
 import { useRouter } from "next/navigation";
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
-import { GenderSelect } from "@/variables/variables";
+import { GenderSelect, Trainers } from "@/variables/variables";
 import { Label } from "../ui/label";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { Calendar } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
 
 const formSchema = z.object({
   name: z.string().min(3, {
@@ -42,6 +49,7 @@ const formSchema = z.object({
     required_error: "Date of Birth is required.",
   }),
   gender: z.string().min(1, "Gender is required."),
+  trainerName: z.string().nonempty("Trainer selection is required."),
 });
 
 const RegisterForm = ({ user }: { user: User }) => {
@@ -124,7 +132,6 @@ const RegisterForm = ({ user }: { user: User }) => {
                 </FormItem>
               )}
             />
-
             <div className="flex flex-col xl:flex-row gap-6">
               <FormField
                 control={form.control}
@@ -161,7 +168,6 @@ const RegisterForm = ({ user }: { user: User }) => {
                 )}
               />
             </div>
-
             <div className="flex flex-col gap-6 xl:flex-row">
               <FormField
                 control={form.control}
@@ -217,10 +223,41 @@ const RegisterForm = ({ user }: { user: User }) => {
               />
             </div>
           </div>
-
-          {/* Trainer Information Section */}
-          {/*  */}
-
+          <div className="space-y-4">
+            <h2 className="text-lg mt-8">Trainer Information</h2>
+            <FormField
+              control={form.control}
+              name="trainerName"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Trainer Name</FormLabel>
+                  <FormControl>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <SelectTrigger className="shad-select-trigger">
+                        <SelectValue placeholder="Select a trainer" />
+                      </SelectTrigger>
+                      <SelectContent className="shad-select-content">
+                        {Trainers.map((trainer, i) => (
+                          <SelectItem
+                            key={trainer.name + i}
+                            value={trainer.name}
+                          >
+                            <div className="flex cursor-pointer items-center gap-2">
+                              <p>{trainer.name}</p>
+                            </div>
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </FormControl>
+                  <FormMessage className="shad-error" />
+                </FormItem>
+              )}
+            />
+          </div>
           <CustomButton isLoading={isLoading}>Get Started</CustomButton>
         </form>
       </Form>
