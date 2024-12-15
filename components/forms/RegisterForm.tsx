@@ -49,7 +49,7 @@ const formSchema = z.object({
     required_error: "Date of Birth is required.",
   }),
   gender: z.string().min(1, "Gender is required."),
-  trainerName: z.string().nonempty("Trainer selection is required."),
+  trainerName: z.string().min(1, { message: "Please select a trainer." }),
 });
 
 const RegisterForm = ({ user }: { user: User }) => {
@@ -223,6 +223,7 @@ const RegisterForm = ({ user }: { user: User }) => {
               />
             </div>
           </div>
+
           <div className="space-y-4">
             <h2 className="text-lg mt-8">Trainer Information</h2>
             <FormField
