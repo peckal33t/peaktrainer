@@ -237,7 +237,7 @@ const RegisterForm = ({ user }: { user: User }) => {
                       onValueChange={field.onChange}
                       defaultValue={field.value}
                     >
-                      <SelectTrigger className="shad-select-trigger">
+                      <SelectTrigger className="shad-select-trigger rounded">
                         <SelectValue placeholder="Select a trainer" />
                       </SelectTrigger>
                       <SelectContent className="shad-select-content">
