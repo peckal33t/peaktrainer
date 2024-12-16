@@ -426,7 +426,11 @@ const RegisterForm = ({ user }: { user: User }) => {
               />
             </div>
           </div>
-          <CustomButton isLoading={isLoading}>Get Started</CustomButton>
+
+          <div className="space-y-6">
+            <h2 className="text-lg mt-8">Terms and Conditions</h2>
+          </div>
+          <CustomButton isLoading={isLoading}>Submit</CustomButton>
         </form>
       </Form>
     </div>
