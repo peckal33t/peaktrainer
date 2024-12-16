@@ -53,6 +53,12 @@ const formSchema = z.object({
   }),
   gender: z.string().min(1, "Gender is required."),
   trainerName: z.string().min(1, { message: "Please select a trainer." }),
+  kg: z.string().refine((value) => /^\d+$/.test(value), {
+    message: "Please enter a valid number for kg (no negative values).",
+  }),
+  height: z.string().refine((value) => /^\d+$/.test(value), {
+    message: "Please enter a valid number for height (no negative values).",
+  }),
 });
 
 const RegisterForm = ({ user }: { user: User }) => {
@@ -63,8 +69,14 @@ const RegisterForm = ({ user }: { user: User }) => {
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
+      address: "",
       email: "",
       phone: "",
+      kg: "",
+      height: "",
+      birthDate: undefined,
+      gender: "",
+      trainerName: "",
     },
   });
 
@@ -247,13 +259,13 @@ const RegisterForm = ({ user }: { user: User }) => {
           </div>
 
           <div className="space-y-4">
-            <h2 className="text-lg mt-8">Trainer Information</h2>
+            <h2 className="text-lg mt-8">Physical Information</h2>
             <FormField
               control={form.control}
               name="trainerName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Trainer Name</FormLabel>
+                  <FormLabel>Personal Trainer</FormLabel>
                   <FormControl>
                     <Select
                       onValueChange={field.onChange}
@@ -280,6 +292,42 @@ const RegisterForm = ({ user }: { user: User }) => {
                 </FormItem>
               )}
             />
+            <div className="flex flex-col xl:flex-row gap-6">
+              <FormField
+                control={form.control}
+                name="kg"
+                render={({ field }) => (
+                  <FormItem className="flex-1">
+                    <FormLabel>Kg</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Your kg"
+                        {...field}
+                        className="form-input shad-input border-0"
+                      />
+                    </FormControl>
+                    <FormMessage className="shad-error" />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="height"
+                render={({ field }) => (
+                  <FormItem className="flex-1">
+                    <FormLabel>Height</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Your height"
+                        {...field}
+                        className="form-input shad-input border-0"
+                      />
+                    </FormControl>
+                    <FormMessage className="shad-error" />
+                  </FormItem>
+                )}
+              />
+            </div>
           </div>
           <CustomButton isLoading={isLoading}>Get Started</CustomButton>
         </form>
