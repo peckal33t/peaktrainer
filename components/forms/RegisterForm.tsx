@@ -36,6 +36,9 @@ const formSchema = z.object({
   name: z.string().min(3, {
     message: "Name must be at least 3 characters.",
   }),
+  address: z.string().min(3, {
+    message: "Address must be at least 3 characters.",
+  }),
   email: z.string().email({
     message: "Please enter a valid email address.",
   }),
@@ -216,6 +219,25 @@ const RegisterForm = ({ user }: { user: User }) => {
                           </div>
                         ))}
                       </RadioGroup>
+                    </FormControl>
+                    <FormMessage className="shad-error" />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div className="space-y-4">
+              <FormField
+                control={form.control}
+                name="address"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Address</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Your address"
+                        {...field}
+                        className="form-input shad-input border-0"
+                      />
                     </FormControl>
                     <FormMessage className="shad-error" />
                   </FormItem>
