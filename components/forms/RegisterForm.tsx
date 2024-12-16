@@ -59,6 +59,14 @@ const formSchema = z.object({
   height: z.string().refine((value) => /^\d+$/.test(value), {
     message: "Please enter a valid number for height (no negative values).",
   }),
+  healthConcerns: z
+    .string()
+    .max(100, "Health concerns must not exceed 100 characters.")
+    .optional(),
+  specialRequirements: z
+    .string()
+    .max(100, "Special requirements must not exceed 100 characters.")
+    .optional(),
 });
 
 const RegisterForm = ({ user }: { user: User }) => {
@@ -321,6 +329,42 @@ const RegisterForm = ({ user }: { user: User }) => {
                         placeholder="Your height"
                         {...field}
                         className="form-input shad-input border-0"
+                      />
+                    </FormControl>
+                    <FormMessage className="shad-error" />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div className="flex flex-col xl:flex-row gap-6">
+              <FormField
+                control={form.control}
+                name="healthConcerns"
+                render={({ field }) => (
+                  <FormItem className="flex-1">
+                    <FormLabel>Health Concerns</FormLabel>
+                    <FormControl>
+                      <textarea
+                        placeholder="Mention any medical conditions, prior injuries, or physical limitations."
+                        {...field}
+                        className="form-textarea shad-input border-0"
+                      />
+                    </FormControl>
+                    <FormMessage className="shad-error" />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="specialRequirements"
+                render={({ field }) => (
+                  <FormItem className="flex-1">
+                    <FormLabel>Special Requirements</FormLabel>
+                    <FormControl>
+                      <textarea
+                        placeholder="Enter any specific needs or requirements"
+                        {...field}
+                        className="form-input shad-input border-0 resize-none h-28"
                       />
                     </FormControl>
                     <FormMessage className="shad-error" />
