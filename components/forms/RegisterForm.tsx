@@ -283,7 +283,7 @@ const RegisterForm = ({ user }: { user: User }) => {
             </div>
           </div>
 
-          <div className="space-y-4">
+          <div className="space-y-6">
             <h2 className="text-lg mt-8">Physical Information</h2>
             <FormField
               control={form.control}
