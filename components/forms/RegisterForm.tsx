@@ -31,6 +31,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
+import { Textarea } from "../ui/textarea";
 
 const formSchema = z.object({
   name: z.string().min(3, {
@@ -67,6 +68,18 @@ const formSchema = z.object({
     .string()
     .max(100, "Special requirements must not exceed 100 characters.")
     .optional(),
+  activityLevel: z
+    .string()
+    .max(100, {
+      message: "Activity level description cannot exceed 100 characters.",
+    })
+    .optional(),
+  fitnessGoals: z
+    .string()
+    .max(100, {
+      message: "Fitness goals description cannot exceed 100 characters.",
+    })
+    .optional(),
 });
 
 const RegisterForm = ({ user }: { user: User }) => {
@@ -85,6 +98,10 @@ const RegisterForm = ({ user }: { user: User }) => {
       birthDate: undefined,
       gender: "",
       trainerName: "",
+      healthConcerns: "",
+      specialRequirements: "",
+      activityLevel: "",
+      fitnessGoals: "",
     },
   });
 
@@ -344,10 +361,10 @@ const RegisterForm = ({ user }: { user: User }) => {
                   <FormItem className="flex-1">
                     <FormLabel>Health Concerns</FormLabel>
                     <FormControl>
-                      <textarea
-                        placeholder="Mention any medical conditions, prior injuries, or physical limitations."
+                      <Textarea
+                        placeholder="Enter any medical conditions, prior injuries, or physical limitations"
                         {...field}
-                        className="form-textarea shad-input border-0"
+                        className="shad-textArea rounded"
                       />
                     </FormControl>
                     <FormMessage className="shad-error" />
@@ -361,10 +378,46 @@ const RegisterForm = ({ user }: { user: User }) => {
                   <FormItem className="flex-1">
                     <FormLabel>Special Requirements</FormLabel>
                     <FormControl>
-                      <textarea
+                      <Textarea
                         placeholder="Enter any specific needs or requirements"
                         {...field}
-                        className="form-input shad-input border-0 resize-none h-28"
+                        className="shad-textArea rounded"
+                      />
+                    </FormControl>
+                    <FormMessage className="shad-error" />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div className="flex flex-col xl:flex-row gap-6">
+              <FormField
+                control={form.control}
+                name="activityLevel"
+                render={({ field }) => (
+                  <FormItem className="flex-1">
+                    <FormLabel>Physical Activity</FormLabel>
+                    <FormControl>
+                      <Textarea
+                        placeholder="Describe your typical physical activity level (e.g., sedentary, active, etc.)."
+                        {...field}
+                        className="shad-textArea rounded"
+                      />
+                    </FormControl>
+                    <FormMessage className="shad-error" />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="fitnessGoals"
+                render={({ field }) => (
+                  <FormItem className="flex-1">
+                    <FormLabel>Fitness Goals</FormLabel>
+                    <FormControl>
+                      <Textarea
+                        placeholder="Describe your fitness goals (e.g., weight loss, muscle gain, endurance)."
+                        {...field}
+                        className="shad-textArea rounded"
                       />
                     </FormControl>
                     <FormMessage className="shad-error" />
