@@ -18,11 +18,17 @@ import CustomButton from "../CustomButton";
 import { useState } from "react";
 import { createUser } from "@/lib/service/client";
 import { useRouter } from "next/navigation";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
+import { Trainers } from "@/variables/variables";
 
 const formSchema = z.object({
-  name: z.string().min(3, {
-    message: "Name must be at least 3 characters.",
-  }),
+  trainerName: z.string().min(1, { message: "Please select a trainer." }),
   email: z.string().email({
     message: "Please enter a valid email address.",
   }),
@@ -47,9 +53,7 @@ const AppointmentForm = ({ userId, clientId, type }: AppointmentFormProps) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "",
-      email: "",
-      phone: "",
+      trainerName: "",
     },
   });
 
@@ -74,7 +78,7 @@ const AppointmentForm = ({ userId, clientId, type }: AppointmentFormProps) => {
       }
 
       const user = {
-        name: values.name,
+        name: values.trainerName,
         email: values.email,
         phone: values.phone,
       };
@@ -100,62 +104,46 @@ const AppointmentForm = ({ userId, clientId, type }: AppointmentFormProps) => {
           <h1 className="text-xl">Appointment</h1>
           <p className="text-dark-700">Create a new appointment</p>
         </section>
+
         <div className="space-y-4">
-          <FormField
-            control={form.control}
-            name="name"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Name</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="Your name"
-                    {...field}
-                    className="form-input shad-input border-0"
-                  />
-                </FormControl>
-                <FormMessage className="shad-error" />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="email"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Email</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="Your email"
-                    {...field}
-                    className="form-input shad-input border-0"
-                  />
-                </FormControl>
-                <FormMessage className="shad-error" />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="phone"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Phone</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="Your phone number"
-                    {...field}
-                    onChange={field.onChange}
-                    className="form-input shad-input border-0"
-                  />
-                </FormControl>
-                <FormMessage className="shad-error" />
-              </FormItem>
-            )}
-          />
+          {type !== "cancel" && (
+            <>
+              <FormField
+                control={form.control}
+                name="trainerName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Personal Trainer</FormLabel>
+                    <FormControl>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <SelectTrigger className="shad-select-trigger rounded">
+                          <SelectValue placeholder="Select a trainer" />
+                        </SelectTrigger>
+                        <SelectContent className="shad-select-content">
+                          {Trainers.map((trainer, i) => (
+                            <SelectItem
+                              key={trainer.name + i}
+                              value={trainer.name}
+                            >
+                              <div className="flex cursor-pointer items-center gap-2">
+                                <p>{trainer.name}</p>
+                              </div>
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                    <FormMessage className="shad-error" />
+                  </FormItem>
+                )}
+              />
+            </>
+          )}
         </div>
+
         <CustomButton isLoading={isLoading}>Get Started</CustomButton>
       </form>
     </Form>
