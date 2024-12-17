@@ -32,6 +32,7 @@ import {
   SelectValue,
 } from "../ui/select";
 import { Textarea } from "../ui/textarea";
+import { Checkbox } from "../ui/checkbox";
 
 const formSchema = z.object({
   name: z.string().min(3, {
@@ -53,33 +54,31 @@ const formSchema = z.object({
     required_error: "Date of Birth is required.",
   }),
   gender: z.string().min(1, "Gender is required."),
-  trainerName: z.string().min(1, { message: "Please select a trainer." }),
   kg: z.string().refine((value) => /^\d+$/.test(value), {
     message: "Please enter a valid number for kg (no negative values).",
   }),
   height: z.string().refine((value) => /^\d+$/.test(value), {
     message: "Please enter a valid number for height (no negative values).",
   }),
-  healthConcerns: z
-    .string()
-    .max(100, "Health concerns must not exceed 100 characters.")
-    .optional(),
-  specialRequirements: z
-    .string()
-    .max(100, "Special requirements must not exceed 100 characters.")
-    .optional(),
-  activityLevel: z
-    .string()
-    .max(100, {
-      message: "Activity level description cannot exceed 100 characters.",
-    })
-    .optional(),
-  fitnessGoals: z
-    .string()
-    .max(100, {
-      message: "Fitness goals description cannot exceed 100 characters.",
-    })
-    .optional(),
+  trainerName: z.string().min(1, { message: "Please select a trainer." }),
+  healthConcerns: z.string().max(100, {
+    message: "Health concerns cannot exceed 100 characters.",
+  }),
+  specialRequirements: z.string().max(100, {
+    message: "Special requirements cannot exceed 100 characters.",
+  }),
+  activityLevel: z.string().max(100, {
+    message: "Activity level description cannot exceed 100 characters.",
+  }),
+  fitnessGoals: z.string().max(100, {
+    message: "Fitness goals cannot exceed 100 characters.",
+  }),
+  agreeTerms: z.boolean().refine((value) => value === true, {
+    message: "You must agree to the terms and conditions.",
+  }),
+  acknowledgePolicy: z.boolean().refine((value) => value === true, {
+    message: "You must acknowledge the privacy policy.",
+  }),
 });
 
 const RegisterForm = ({ user }: { user: User }) => {
@@ -102,6 +101,8 @@ const RegisterForm = ({ user }: { user: User }) => {
       specialRequirements: "",
       activityLevel: "",
       fitnessGoals: "",
+      agreeTerms: false,
+      acknowledgePolicy: false,
     },
   });
 
@@ -429,6 +430,53 @@ const RegisterForm = ({ user }: { user: User }) => {
 
           <div className="space-y-6">
             <h2 className="text-lg mt-8">Terms and Conditions</h2>
+            <div className="flex flex-col space-y-4">
+              <FormField
+                control={form.control}
+                name="agreeTerms"
+                render={({ field }) => (
+                  <FormItem className="flex items-center space-x-2">
+                    <FormControl>
+                      <Checkbox
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                        id="agreeTerms"
+                      />
+                    </FormControl>
+                    <FormLabel
+                      htmlFor="agreeTerms"
+                      className="checkbox-label m-0"
+                    >
+                      I agree to the{" "}
+                      <span className="underline">terms and conditions.</span>
+                    </FormLabel>
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="acknowledgePolicy"
+                render={({ field }) => (
+                  <FormItem className="flex items-center space-x-2">
+                    <FormControl>
+                      <Checkbox
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                        id="acknowledgePolicy"
+                      />
+                    </FormControl>
+                    <FormLabel
+                      htmlFor="acknowledgePolicy"
+                      className="checkbox-label m-0"
+                    >
+                      I acknowledge that my data will be processed in accordance
+                      with the{" "}
+                      <span className="underline">privacy policy.</span>
+                    </FormLabel>
+                  </FormItem>
+                )}
+              />
+            </div>
           </div>
           <CustomButton isLoading={isLoading}>Submit</CustomButton>
         </form>
