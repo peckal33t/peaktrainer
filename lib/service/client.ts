@@ -1,7 +1,7 @@
 "use server";
 
 import { ID, Query } from "node-appwrite";
-import { appwriteUsers } from "../db";
+import { appwriteDatabases, appwriteUsers } from "../db";
 import { parseStringify } from "../utilities";
 
 export const createUser = async (user: CreateUserParams) => {
@@ -34,5 +34,20 @@ export const getUser = async (userId: string) => {
     return parseStringify(user);
   } catch (err) {
     console.error(err);
+  }
+};
+
+export const registerClient = async ({ ...client }: RegisterUserParams) => {
+  try {
+    const newClient = await appwriteDatabases.createDocument(
+      process.env.NEXT_PUBLIC_DATABASE_ID!,
+      process.env.NEXT_PUBLIC_CLIENT_ID!,
+      ID.unique(),
+      client
+    );
+
+    return parseStringify(newClient);
+  } catch (error) {
+    console.error(error);
   }
 };

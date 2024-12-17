@@ -16,7 +16,7 @@ import {
 import { Input } from "@/components/ui/input";
 import CustomButton from "../CustomButton";
 import { useState } from "react";
-import { createUser } from "@/lib/service/client";
+import { createUser, registerClient } from "@/lib/service/client";
 import { useRouter } from "next/navigation";
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 import { GenderSelect, Trainers } from "@/variables/variables";
@@ -53,7 +53,7 @@ const formSchema = z.object({
   birthDate: z.date({
     required_error: "Date of Birth is required.",
   }),
-  gender: z.string().min(1, "Gender is required."),
+  gender: z.enum(["Male", "Female"]),
   kg: z.string().refine((value) => /^\d+$/.test(value), {
     message: "Please enter a valid number for kg (no negative values).",
   }),
@@ -95,7 +95,7 @@ const RegisterForm = ({ user }: { user: User }) => {
       kg: "",
       height: "",
       birthDate: undefined,
-      gender: "",
+      gender: undefined,
       trainerName: "",
       healthConcerns: "",
       specialRequirements: "",
@@ -110,40 +110,30 @@ const RegisterForm = ({ user }: { user: User }) => {
     setIsLoading(true);
 
     try {
-      console.log("Environment Variables:");
-      console.log("NEXT_PUBLIC_ENDPOINT:", process.env.NEXT_PUBLIC_ENDPOINT);
-      console.log(
-        "NEXT_PUBLIC_PROJECT_ID:",
-        process.env.NEXT_PUBLIC_PROJECT_ID
-      );
-      console.log("NEXT_PUBLIC_API_KEY:", process.env.NEXT_PUBLIC_API_KEY);
-
-      const endpoint = process.env.NEXT_PUBLIC_ENDPOINT;
-      const projectId = process.env.NEXT_PUBLIC_PROJECT_ID;
-      const apiKey = process.env.NEXT_PUBLIC_API_KEY;
-
-      if (!endpoint || !projectId || !apiKey) {
-        throw new Error("Missing required environment variables");
-      }
-
-      const user = {
+      const clientData: RegisterUserParams = {
+        userId: user.$id,
         name: values.name,
         email: values.email,
         phone: values.phone,
+        address: values.address,
+        kg: values.kg,
+        height: values.height,
+        birthDate: new Date(values.birthDate).toISOString(),
+        gender: values.gender as Gender,
+        primaryTrainer: values.trainerName || "Default Trainer",
+        agreement: values.agreeTerms,
       };
 
-      const createNewUser = await createUser(user);
+      const client = await registerClient(clientData);
 
-      if (createNewUser) {
-        router.push(`/clients/${createNewUser.$id}/register`);
-      } else {
-        console.error("User creation failed or returned an invalid response.");
+      if (client) {
+        router.push(`/clients/${user.$id}/create-appointment`);
       }
     } catch (error) {
-      console.error("Error in onSubmit:", error);
+      console.error("Error registering client:", error);
+    } finally {
+      setIsLoading(false);
     }
-
-    setIsLoading(false);
   };
 
   return (
