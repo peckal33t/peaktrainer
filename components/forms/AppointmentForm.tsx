@@ -3,7 +3,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -13,7 +12,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import CustomButton from "../CustomButton";
 import { useState } from "react";
 import { createUser } from "@/lib/service/client";
@@ -26,11 +24,17 @@ import {
   SelectValue,
 } from "../ui/select";
 import { Trainers } from "@/variables/variables";
+import { Calendar } from "lucide-react";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 const formSchema = z.object({
   trainerName: z.string().min(1, { message: "Please select a trainer." }),
   email: z.string().email({
     message: "Please enter a valid email address.",
+  }),
+  appointmentDate: z.date({
+    required_error: "Appointment date is required.",
   }),
   phone: z
     .string()
@@ -54,6 +58,7 @@ const AppointmentForm = ({ userId, clientId, type }: AppointmentFormProps) => {
     resolver: zodResolver(formSchema),
     defaultValues: {
       trainerName: "",
+      appointmentDate: new Date(Date.now()),
     },
   });
 
@@ -103,10 +108,9 @@ const AppointmentForm = ({ userId, clientId, type }: AppointmentFormProps) => {
         <section className="mb-12 space-y-4">
           <h1 className="text-xl">Appointment</h1>
           <p className="text-dark-700">
-            Create a new appointment with your desired trainer.
+            Create a new appointment with your preferred trainer.
           </p>
         </section>
-
         <div className="space-y-4">
           {type !== "cancel" && (
             <>
@@ -142,10 +146,37 @@ const AppointmentForm = ({ userId, clientId, type }: AppointmentFormProps) => {
                   </FormItem>
                 )}
               />
+
+              <FormField
+                control={form.control}
+                name="appointmentDate"
+                render={({ field }) => (
+                  <FormItem className="flex-1">
+                    <FormLabel>Appointment Date</FormLabel>
+                    <FormControl>
+                      <div className="flex rounded border border-dark-500 bg-dark-400 items-center">
+                        <Calendar
+                          height={20}
+                          width={20}
+                          className="ml-2 mb-1"
+                        />
+                        <DatePicker
+                          selected={field.value}
+                          onChange={(date: Date | null) => field.onChange(date)}
+                          dateFormat="MM/dd/yyyy - h:mm aa"
+                          showTimeSelect
+                          className="date-picker form-input shad-input border-0 cursor-pointer"
+                          placeholderText="Select date"
+                        />
+                      </div>
+                    </FormControl>
+                    <FormMessage className="shad-error" />
+                  </FormItem>
+                )}
+              />
             </>
           )}
         </div>
-
         <CustomButton isLoading={isLoading}>Get Started</CustomButton>
       </form>
     </Form>
