@@ -51,3 +51,17 @@ export const registerClient = async ({ ...client }: RegisterUserParams) => {
     console.error(error);
   }
 };
+
+export const getClient = async (userId: string) => {
+  try {
+    const clients = await appwriteDatabases.listDocuments(
+      process.env.NEXT_PUBLIC_DATABASE_ID!,
+      process.env.NEXT_PUBLIC_CLIENT_ID!,
+      [Query.equal("userId", userId)]
+    );
+
+    return parseStringify(clients.documents[0]);
+  } catch (err) {
+    console.error(err);
+  }
+};
