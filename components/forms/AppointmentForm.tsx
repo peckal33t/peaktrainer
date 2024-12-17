@@ -34,15 +34,13 @@ const formSchema = z.object({
     ),
 });
 
-const AppointmentForm = ({
-  userId,
-  clientId,
-  type,
-}: {
+type AppointmentFormProps = {
   userId: string;
   clientId: string;
   type: "create" | "cancel";
-}) => {
+};
+
+const AppointmentForm = ({ userId, clientId, type }: AppointmentFormProps) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
