@@ -1,4 +1,6 @@
+import Image from "next/image";
 import Link from "next/link";
+import successGif from "@/app/assets/images/success.gif";
 
 const SuccessPage = () => {
   return (
@@ -11,6 +13,13 @@ const SuccessPage = () => {
         </Link>
 
         <div className="flex flex-col items-center">
+          <Image
+            src={successGif}
+            height={300}
+            width={280}
+            alt="success"
+            unoptimized
+          />
           <h1 className="text-xl">
             Your appointment has been{" "}
             <span className="text-orange-500">successfully scheduled!</span> 🎉
