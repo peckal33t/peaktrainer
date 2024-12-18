@@ -65,3 +65,20 @@ export const getClient = async (userId: string) => {
     console.error(err);
   }
 };
+
+export const createAppointment = async (
+  appointment: CreateAppointmentParams
+) => {
+  try {
+    const newAppointment = await appwriteDatabases.createDocument(
+      process.env.NEXT_PUBLIC_DATABASE_ID!,
+      process.env.NEXT_PUBLIC_APPOINTMENT_ID!,
+      ID.unique(),
+      appointment
+    );
+
+    return parseStringify(newAppointment);
+  } catch (error) {
+    console.error(error);
+  }
+};

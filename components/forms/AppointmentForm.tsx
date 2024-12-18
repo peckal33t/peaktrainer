@@ -6,7 +6,6 @@ import { z } from "zod";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -14,7 +13,6 @@ import {
 } from "@/components/ui/form";
 import CustomButton from "../CustomButton";
 import { useState } from "react";
-import { createUser } from "@/lib/service/client";
 import { useRouter } from "next/navigation";
 import {
   Select,
@@ -28,90 +26,90 @@ import { Calendar } from "lucide-react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { Textarea } from "../ui/textarea";
-
-const formSchema = z.object({
-  trainerName: z.string().min(1, { message: "Please select a trainer." }),
-  email: z.string().email({
-    message: "Please enter a valid email address.",
-  }),
-  appointmentDate: z.date({
-    required_error: "Appointment date is required.",
-  }),
-  trainingExperience: z
-    .string()
-    .max(100, { message: "Additional notes must be 100 characters or fewer." })
-    .optional(),
-  additionalNotes: z
-    .string()
-    .max(100, {
-      message: "Training experience must be 100 characters or fewer.",
-    })
-    .optional(),
-  phone: z
-    .string()
-    .refine(
-      (value) => /^\+46\s?\d{2}\s?\d{3}\s?\d{2}\s?\d{2}$/.test(value),
-      "Please enter a valid phone number."
-    ),
-});
+import { createAppointment } from "@/lib/service/client";
+import {
+  CreateSchema,
+  ScheduleSchema,
+  CancelSchema,
+  getAppSchema,
+} from "@/lib/schema";
 
 type AppointmentFormProps = {
   userId: string;
   clientId: string;
-  type: "create" | "cancel";
+  type: "create" | "cancel" | "schedule";
 };
 
 const AppointmentForm = ({ userId, clientId, type }: AppointmentFormProps) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
-  const form = useForm<z.infer<typeof formSchema>>({
+  const formSchema = getAppSchema(type);
+
+  const form = useForm<z.infer<typeof CreateSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       trainerName: "",
       appointmentDate: new Date(Date.now()),
+      trainingExperience: "",
+      additionalNotes: "",
+      cancellationReason: "",
     },
   });
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+  const onSubmit = async (values: z.infer<typeof CreateSchema>) => {
     setIsLoading(true);
 
+    let statusType;
+    switch (type) {
+      case "schedule":
+        statusType = "scheduled";
+        break;
+      case "cancel":
+        statusType = "cancelled";
+        break;
+      default:
+        statusType = "pending";
+    }
+
     try {
-      console.log("Environment Variables:");
-      console.log("NEXT_PUBLIC_ENDPOINT:", process.env.NEXT_PUBLIC_ENDPOINT);
-      console.log(
-        "NEXT_PUBLIC_PROJECT_ID:",
-        process.env.NEXT_PUBLIC_PROJECT_ID
-      );
-      console.log("NEXT_PUBLIC_API_KEY:", process.env.NEXT_PUBLIC_API_KEY);
-
-      const endpoint = process.env.NEXT_PUBLIC_ENDPOINT;
-      const projectId = process.env.NEXT_PUBLIC_PROJECT_ID;
-      const apiKey = process.env.NEXT_PUBLIC_API_KEY;
-
-      if (!endpoint || !projectId || !apiKey) {
-        throw new Error("Missing required environment variables");
-      }
-
-      const user = {
-        name: values.trainerName,
-        email: values.email,
-        phone: values.phone,
+      const appData: any = {
+        userId,
+        client: clientId,
+        trainerName: values.trainerName,
+        appointmentDate: new Date(values.appointmentDate),
+        trainingExperience: values.trainingExperience,
+        additionalNotes: values.additionalNotes,
+        cancellationReason: values.cancellationReason,
+        statusType,
       };
 
-      const createNewUser = await createUser(user);
+      const appointment = await createAppointment(appData);
 
-      if (createNewUser) {
-        router.push(`/clients/${createNewUser.$id}/register`);
-      } else {
-        console.error("User creation failed or returned an invalid response.");
+      if (appointment) {
+        form.reset();
+        router.push(
+          `/clients/${userId}/create-appointment/success?appointmentId=${appointment.$id}`
+        );
       }
     } catch (error) {
-      console.error("Error in onSubmit:", error);
+      console.error(error);
     }
 
     setIsLoading(false);
   };
+
+  let label;
+  switch (type) {
+    case "cancel":
+      label = "Cancel Appointment";
+      break;
+    case "schedule":
+      label = "Schedule Appointment";
+      break;
+    default:
+      label = "Submit Appointment";
+  }
 
   return (
     <Form {...form}>
@@ -186,7 +184,7 @@ const AppointmentForm = ({ userId, clientId, type }: AppointmentFormProps) => {
                 )}
               />
 
-              <div className="flex flex-col gap-6">
+              <div className="flex flex-col gap-6 xl:flex-row">
                 <FormField
                   control={form.control}
                   name="trainingExperience"
@@ -226,7 +224,35 @@ const AppointmentForm = ({ userId, clientId, type }: AppointmentFormProps) => {
             </>
           )}
         </div>
-        <CustomButton isLoading={isLoading}>Get Started</CustomButton>
+
+        {type === "cancel" && (
+          <FormField
+            control={form.control}
+            name="cancellationReason"
+            render={({ field }) => (
+              <FormItem className="flex-1">
+                <FormLabel>Cancellation Reason</FormLabel>
+                <FormControl>
+                  <Textarea
+                    placeholder="Provide a reason for cancelling the appointment"
+                    {...field}
+                    className="shad-textArea rounded"
+                  />
+                </FormControl>
+                <FormMessage className="shad-error" />
+              </FormItem>
+            )}
+          />
+        )}
+
+        <CustomButton
+          className={`${
+            type === "cancel" ? "shad-danger-btn" : "shad-primary-btn"
+          } w-full rounded`}
+          isLoading={isLoading}
+        >
+          {label}
+        </CustomButton>
       </form>
     </Form>
   );

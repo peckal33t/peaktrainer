@@ -26,3 +26,13 @@ declare interface RegisterUserParams extends CreateUserParams {
   primaryTrainer: string;
   agreement: boolean;
 }
+
+declare type CreateAppointmentParams = {
+  userId: string;
+  client: string;
+  trainerName: string;
+  trainingExperience: string;
+  appointmentDate: string;
+  statusType: Status;
+  additionalNotes: string | undefined;
+};

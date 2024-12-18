@@ -4,14 +4,22 @@ import { Button } from "./ui/button";
 interface CustomButtonProps {
   isLoading: boolean;
   children: React.ReactNode;
+  className?: string;
 }
 
-const CustomButton = ({ isLoading, children }: CustomButtonProps) => {
+const CustomButton = ({
+  isLoading,
+  children,
+  className,
+}: CustomButtonProps) => {
   return (
     <Button
       type="submit"
       disabled={isLoading}
-      className="w-full rounded bg-orange-600 text-white hover:bg-orange-500 mt-7"
+      className={
+        className ??
+        "w-full rounded bg-orange-600 text-white hover:bg-orange-500 mt-7"
+      }
     >
       {isLoading ? <div>Loading...</div> : children}
     </Button>
