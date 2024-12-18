@@ -27,6 +27,7 @@ import { Trainers } from "@/variables/variables";
 import { Calendar } from "lucide-react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { Textarea } from "../ui/textarea";
 
 const formSchema = z.object({
   trainerName: z.string().min(1, { message: "Please select a trainer." }),
@@ -36,6 +37,16 @@ const formSchema = z.object({
   appointmentDate: z.date({
     required_error: "Appointment date is required.",
   }),
+  trainingExperience: z
+    .string()
+    .max(100, { message: "Additional notes must be 100 characters or fewer." })
+    .optional(),
+  additionalNotes: z
+    .string()
+    .max(100, {
+      message: "Training experience must be 100 characters or fewer.",
+    })
+    .optional(),
   phone: z
     .string()
     .refine(
@@ -174,6 +185,44 @@ const AppointmentForm = ({ userId, clientId, type }: AppointmentFormProps) => {
                   </FormItem>
                 )}
               />
+
+              <div className="flex flex-col gap-6">
+                <FormField
+                  control={form.control}
+                  name="trainingExperience"
+                  render={({ field }) => (
+                    <FormItem className="flex-1">
+                      <FormLabel>Previous Training Experience</FormLabel>
+                      <FormControl>
+                        <Textarea
+                          placeholder="Describe your previous training or fitness experience"
+                          {...field}
+                          className="shad-textArea rounded"
+                        />
+                      </FormControl>
+                      <FormMessage className="shad-error" />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="additionalNotes"
+                  render={({ field }) => (
+                    <FormItem className="flex-1">
+                      <FormLabel>Additional Notes</FormLabel>
+                      <FormControl>
+                        <Textarea
+                          placeholder="Enter any specific goals, preferences, or requests for the session"
+                          {...field}
+                          className="shad-textArea rounded"
+                        />
+                      </FormControl>
+                      <FormMessage className="shad-error" />
+                    </FormItem>
+                  )}
+                />
+              </div>
             </>
           )}
         </div>
