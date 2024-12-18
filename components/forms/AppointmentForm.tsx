@@ -279,7 +279,9 @@ const AppointmentForm = ({ userId, clientId, type }: AppointmentFormProps) => {
 
         <CustomButton
           className={`${
-            type === "cancel" ? "shad-danger-btn" : "shad-primary-btn"
+            type === "cancel"
+              ? "shad-danger-btn"
+              : "rounded bg-orange-600 text-white hover:bg-orange-500 mt-7"
           } w-full rounded`}
           isLoading={isLoading}
         >
