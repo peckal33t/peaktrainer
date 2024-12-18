@@ -17,3 +17,12 @@ export const Trainers = [
     name: "Sophia Davis",
   },
 ];
+
+export const Training = [
+  "Strength",
+  "Physical",
+  "Calisthenics",
+  "Yoga",
+  "CrossFit",
+  "Martial Art",
+];
