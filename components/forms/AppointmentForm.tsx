@@ -21,7 +21,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
-import { Trainers } from "@/variables/variables";
+import { Trainers, Training } from "@/variables/variables";
 import { Calendar } from "lucide-react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -53,6 +53,7 @@ const AppointmentForm = ({ userId, clientId, type }: AppointmentFormProps) => {
       appointmentDate: new Date(Date.now()),
       trainingExperience: "",
       additionalNotes: "",
+      trainingType: "",
       cancellationReason: "",
     },
   });
@@ -81,6 +82,7 @@ const AppointmentForm = ({ userId, clientId, type }: AppointmentFormProps) => {
         trainingExperience: values.trainingExperience,
         additionalNotes: values.additionalNotes,
         cancellationReason: values.cancellationReason,
+        trainingType: values.trainingType,
         statusType,
       };
 
@@ -145,6 +147,36 @@ const AppointmentForm = ({ userId, clientId, type }: AppointmentFormProps) => {
                             >
                               <div className="flex cursor-pointer items-center gap-2">
                                 <p>{trainer.name}</p>
+                              </div>
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                    <FormMessage className="shad-error" />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="trainingType"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Training Type</FormLabel>
+                    <FormControl>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <SelectTrigger className="shad-select-trigger rounded">
+                          <SelectValue placeholder="Select training type" />
+                        </SelectTrigger>
+                        <SelectContent className="shad-select-content">
+                          {Training.map((type, i) => (
+                            <SelectItem key={type + i} value={type}>
+                              <div className="flex cursor-pointer items-center gap-2">
+                                <p>{type}</p>
                               </div>
                             </SelectItem>
                           ))}

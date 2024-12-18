@@ -17,6 +17,9 @@ export const CreateSchema = z.object({
       message: "Additional notes must be 100 characters or fewer.",
     })
     .optional(),
+  trainingType: z
+    .string()
+    .min(1, { message: "Please select a training type." }),
   cancellationReason: z.string().optional(),
 });
 
@@ -25,6 +28,9 @@ export const ScheduleSchema = z.object({
   appointmentDate: z.date({
     required_error: "Appointment date is required.",
   }),
+  trainingType: z
+    .string()
+    .min(1, { message: "Please select a training type." }),
   trainingExperience: z.string().optional(),
   additionalNotes: z.string().optional(),
   cancellationReason: z.string().optional(),
