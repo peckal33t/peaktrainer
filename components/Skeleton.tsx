@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import {
   AlertDialog,
@@ -12,16 +13,29 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import {
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSeparator,
+  InputOTPSlot,
+} from "@/components/ui/input-otp";
 import { X } from "lucide-react";
-import { useRouter } from "next/navigation";
 
 const Skeleton = () => {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(true);
+  const [code, setCode] = useState("");
+  const [error, setError] = useState("");
 
   const closePopUp = () => {
     setIsOpen(false);
     router.push("/");
+  };
+
+  const verifyCode = (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    event.preventDefault();
   };
 
   return (
@@ -41,9 +55,33 @@ const Skeleton = () => {
             To unlock access, provide the Authorization Code.
           </AlertDialogDescription>
         </AlertDialogHeader>
+        <div className="">
+          <InputOTP
+            maxLength={4}
+            value={code}
+            onChange={(index) => setCode(index)}
+          >
+            <InputOTPGroup className="shad-otp">
+              <InputOTPSlot className="shad-otp-slot" index={0} />
+              <InputOTPSlot className="shad-otp-slot" index={1} />
+              <InputOTPSlot className="shad-otp-slot" index={2} />
+              <InputOTPSlot className="shad-otp-slot" index={3} />
+            </InputOTPGroup>
+          </InputOTP>
+
+          {error && (
+            <p className="flex justify-center shad-error text-14-regualar mt-4">
+              {error}
+            </p>
+          )}
+        </div>
         <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction>Continue</AlertDialogAction>
+          <AlertDialogAction
+            onClick={(event) => verifyCode(event)}
+            className="w-full rounded bg-orange-600 text-white hover:bg-orange-500 mt-7"
+          >
+            Verify
+          </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
