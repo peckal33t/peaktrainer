@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -11,12 +14,15 @@ import {
 } from "@/components/ui/alert-dialog";
 
 const Skeleton = () => {
+  const [isOpen, setIsOpen] = useState(true);
+
   return (
-    <AlertDialog>
-      <AlertDialogTrigger>Open</AlertDialogTrigger>
-      <AlertDialogContent>
+    <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
+      <AlertDialogContent className="shad-alert-dialog">
         <AlertDialogHeader>
-          <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+          <AlertDialogTitle className="flex items-start justify-between">
+            Authorization Code
+          </AlertDialogTitle>
           <AlertDialogDescription>
             This action cannot be undone. This will permanently delete your
             account and remove your data from our servers.
