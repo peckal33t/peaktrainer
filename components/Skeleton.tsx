@@ -20,7 +20,7 @@ import {
   InputOTPSlot,
 } from "@/components/ui/input-otp";
 import { X } from "lucide-react";
-import { encryptKey } from "@/lib/utilities";
+import { decryptKey, encryptKey } from "@/lib/utilities";
 
 const Skeleton = () => {
   const router = useRouter();
@@ -35,8 +35,10 @@ const Skeleton = () => {
       : null;
 
   useEffect(() => {
+    const decrypt = isAuthorizationKey && decryptKey(isAuthorizationKey);
+
     if (path) {
-      if (secretKey === process.env.NEXT_PUBLIC_AUTHORIZATION_CODE) {
+      if (decrypt === process.env.NEXT_PUBLIC_AUTHORIZATION_CODE) {
         setIsOpen(false);
         router.push("/admin");
       } else {
@@ -50,19 +52,22 @@ const Skeleton = () => {
     router.push("/");
   };
 
-  const verifyCode = (
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => {
-    event.preventDefault();
-
+  const verifyCode = () => {
     if (secretKey === process.env.NEXT_PUBLIC_AUTHORIZATION_CODE) {
       const key = encryptKey(secretKey);
 
       localStorage.setItem("authorizationKey", key);
 
       setIsOpen(false);
+      router.push("/admin");
     } else {
       setErrorMessage("Access denied. The code you entered is incorrect.");
+    }
+  };
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    if (event.key === "Enter") {
+      verifyCode();
     }
   };
 
@@ -83,7 +88,7 @@ const Skeleton = () => {
             To unlock access, provide the Authorization Code.
           </AlertDialogDescription>
         </AlertDialogHeader>
-        <div className="">
+        <div onKeyDown={handleKeyDown} className="">
           <InputOTP
             maxLength={4}
             value={secretKey}
@@ -98,14 +103,14 @@ const Skeleton = () => {
           </InputOTP>
 
           {errorMessage && (
-            <p className="flex justify-center shad-error text-14-regualar mt-4">
+            <p className="flex justify-center shad-error text-md mt-5">
               {errorMessage}
             </p>
           )}
         </div>
         <AlertDialogFooter>
           <AlertDialogAction
-            onClick={(event) => verifyCode(event)}
+            onClick={verifyCode}
             className="w-full rounded bg-orange-600 text-white hover:bg-orange-500 mt-7"
           >
             Verify
