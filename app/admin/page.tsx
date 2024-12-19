@@ -1,7 +1,25 @@
-import { Table } from "@/components/ui/table";
+import { columns, Payment } from "@/components/table/columns";
+import { DataTable } from "@/components/table/DataTable";
+import { getAppointments } from "@/lib/service/client";
 import Link from "next/link";
 
-const AdminPage = () => {
+const getData: () => Promise<Payment[]> = async () => {
+  // Fetch data from your API here.
+  return [
+    {
+      id: "728ed52f",
+      amount: 100,
+      status: "pending",
+      email: "m@example.com",
+    },
+    // ...
+  ];
+};
+
+const AdminPage = async () => {
+  const data = await getData();
+  const appointments = await getAppointments();
+
   return (
     <div className="mx-auto flex flex-col max-w-7xl space-y-4 py-5">
       <div className="admin-header">
@@ -18,7 +36,8 @@ const AdminPage = () => {
           <h1 className="text-xl">Admin Dashboard</h1>
         </div>
 
-        <Table />
+        {/* <DataTable data={appointments.documents} columns={columns} /> */}
+        <DataTable data={data} columns={columns} />
       </section>
     </div>
   );

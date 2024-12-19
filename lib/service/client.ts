@@ -3,6 +3,7 @@
 import { ID, Query } from "node-appwrite";
 import { appwriteDatabases, appwriteUsers } from "../db";
 import { parseStringify } from "../utilities";
+import { Appointment } from "@/types/db.types";
 
 export const createUser = async (user: CreateUserParams) => {
   try {
@@ -78,6 +79,39 @@ export const createAppointment = async (
     );
 
     return parseStringify(newAppointment);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const getAppointments = async () => {
+  try {
+    const appointments = await appwriteDatabases.listDocuments(
+      process.env.NEXT_PUBLIC_DATABASE_ID!,
+      process.env.NEXT_PUBLIC_APPOINTMENT_ID!,
+      [Query.orderDesc("$createdAt")]
+    );
+
+    const documents = appointments.documents as Appointment[];
+
+    const getCounts = (appointments: Appointment[]) => {
+      return appointments.reduce(
+        (acc, appointment) => {
+          const statusKey = `${appointment.status}Count` as keyof typeof acc;
+          acc[statusKey] = (acc[statusKey] || 0) + 1;
+          return acc;
+        },
+        { scheduledCount: 0, pendingCount: 0, cancelledCount: 0 }
+      );
+    };
+
+    const counts = getCounts(documents);
+
+    return parseStringify({
+      totalCount: appointments.total,
+      ...counts,
+      documents: appointments.documents,
+    });
   } catch (error) {
     console.error(error);
   }
