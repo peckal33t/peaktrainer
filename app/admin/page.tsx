@@ -17,7 +17,6 @@ const getData: () => Promise<Payment[]> = async () => {
 };
 
 const AdminPage = async () => {
-  const data = await getData();
   const appointments = await getAppointments();
 
   return (
@@ -36,8 +35,7 @@ const AdminPage = async () => {
           <h1 className="text-xl">Admin Dashboard</h1>
         </div>
 
-        {/* <DataTable data={appointments.documents} columns={columns} /> */}
-        <DataTable data={data} columns={columns} />
+        <DataTable data={appointments.documents} columns={columns} />
       </section>
     </div>
   );
