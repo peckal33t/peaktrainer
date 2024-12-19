@@ -12,3 +12,15 @@ export interface Client extends Models.Document {
   birthDate: string;
   primaryTrainer: string;
 }
+
+export interface Appointment extends Models.Document {
+  client: Client;
+  appointmentDate: Date;
+  trainingExperience: string;
+  additionalNotes: string;
+  trainerName: string;
+  statusType: Status;
+  userId: string;
+  cancellationReason: string;
+  trainingType: string;
+}
