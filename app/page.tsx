@@ -1,9 +1,14 @@
 import ClientForm from "@/components/forms/ClientForm";
+import Skeleton from "@/components/Skeleton";
 import Link from "next/link";
 
-export default function Home() {
+export default function Home({ searchParams }: SearchParamProps) {
+  const admin = searchParams.admin === "true";
+
   return (
     <div className="flex h-screen max-h-screen">
+      {admin && <Skeleton />}
+
       <nav className="absolute top-7 right-24 flex space-x-6">
         <Link href="/login" className="text-sm font-medium text-white">
           Login
