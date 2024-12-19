@@ -1,3 +1,4 @@
+import { Table } from "@/components/ui/table";
 import Link from "next/link";
 
 const AdminPage = () => {
@@ -16,6 +17,8 @@ const AdminPage = () => {
         <div className="w-full space-y-4">
           <h1 className="text-xl">Admin Dashboard</h1>
         </div>
+
+        <Table />
       </section>
     </div>
   );
