@@ -38,8 +38,7 @@ const Skeleton = () => {
             />
           </AlertDialogTitle>
           <AlertDialogDescription>
-            This action cannot be undone. This will permanently delete your
-            account and remove your data from our servers.
+            To unlock access, provide the Authorization Code.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
