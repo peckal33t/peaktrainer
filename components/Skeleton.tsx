@@ -1,7 +1,7 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -20,12 +20,30 @@ import {
   InputOTPSlot,
 } from "@/components/ui/input-otp";
 import { X } from "lucide-react";
+import { encryptKey } from "@/lib/utilities";
 
 const Skeleton = () => {
   const router = useRouter();
+  const path = usePathname();
   const [isOpen, setIsOpen] = useState(true);
-  const [code, setCode] = useState("");
-  const [error, setError] = useState("");
+  const [secretKey, setSecretKey] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const isAuthorizationKey =
+    typeof window !== "undefined"
+      ? window.localStorage.getItem("authorizationKey")
+      : null;
+
+  useEffect(() => {
+    if (path) {
+      if (secretKey === process.env.NEXT_PUBLIC_AUTHORIZATION_CODE) {
+        setIsOpen(false);
+        router.push("/admin");
+      } else {
+        setIsOpen(true);
+      }
+    }
+  }, [isAuthorizationKey]);
 
   const closePopUp = () => {
     setIsOpen(false);
@@ -36,6 +54,16 @@ const Skeleton = () => {
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     event.preventDefault();
+
+    if (secretKey === process.env.NEXT_PUBLIC_AUTHORIZATION_CODE) {
+      const key = encryptKey(secretKey);
+
+      localStorage.setItem("authorizationKey", key);
+
+      setIsOpen(false);
+    } else {
+      setErrorMessage("Access denied. The code you entered is incorrect.");
+    }
   };
 
   return (
@@ -58,8 +86,8 @@ const Skeleton = () => {
         <div className="">
           <InputOTP
             maxLength={4}
-            value={code}
-            onChange={(index) => setCode(index)}
+            value={secretKey}
+            onChange={(index) => setSecretKey(index)}
           >
             <InputOTPGroup className="shad-otp">
               <InputOTPSlot className="shad-otp-slot" index={0} />
@@ -69,9 +97,9 @@ const Skeleton = () => {
             </InputOTPGroup>
           </InputOTP>
 
-          {error && (
+          {errorMessage && (
             <p className="flex justify-center shad-error text-14-regualar mt-4">
-              {error}
+              {errorMessage}
             </p>
           )}
         </div>
