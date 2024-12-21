@@ -23,15 +23,18 @@ export const createUser = async (user: CreateUserParams) => {
     );
 
     return parseStringify(newUser);
-  } catch (err: any) {
-    console.error("Error creating user:", err);
-    if (err.code === 409) {
-      const docs = await appwriteUsers.list([
+  } catch (error: any) {
+    if (error?.code === 409) {
+      const existingUser = await appwriteUsers.list([
         Query.equal("email", [user.email]),
       ]);
-      return docs.users[0];
+      console.log("Existing user found:", existingUser);
+      return existingUser.users[0];
     }
-    throw new Error("Failed to create user.");
+
+    throw new Error(
+      `User creation failed: ${error.message || "Unknown error"}`
+    );
   }
 };
 

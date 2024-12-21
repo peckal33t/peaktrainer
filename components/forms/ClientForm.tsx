@@ -29,8 +29,8 @@ const formSchema = z.object({
   phone: z
     .string()
     .refine(
-      (value) => /^\+46\s?\d{2}\s?\d{3}\s?\d{2}\s?\d{2}$/.test(value),
-      "Please enter a valid phone number."
+      (value) => /^\+(\d{1,15})$/.test(value),
+      "Please enter a valid phone number in international format (e.g., +46701234567)."
     ),
 });
 
@@ -51,22 +51,6 @@ const ClientForm = () => {
     setIsLoading(true);
 
     try {
-      console.log("Environment Variables:");
-      console.log("NEXT_PUBLIC_ENDPOINT:", process.env.NEXT_PUBLIC_ENDPOINT);
-      console.log(
-        "NEXT_PUBLIC_PROJECT_ID:",
-        process.env.NEXT_PUBLIC_PROJECT_ID
-      );
-      console.log("NEXT_PUBLIC_API_KEY:", process.env.NEXT_PUBLIC_API_KEY);
-
-      const endpoint = process.env.NEXT_PUBLIC_ENDPOINT;
-      const projectId = process.env.NEXT_PUBLIC_PROJECT_ID;
-      const apiKey = process.env.NEXT_PUBLIC_API_KEY;
-
-      if (!endpoint || !projectId || !apiKey) {
-        throw new Error("Missing required environment variables");
-      }
-
       const user = {
         name: values.name,
         email: values.email,
