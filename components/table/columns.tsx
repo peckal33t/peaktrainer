@@ -4,6 +4,7 @@ import { formatDateTime } from "@/lib/utilities";
 import { Appointment } from "@/types/db.types";
 import { Trainers } from "@/variables/variables";
 import { ColumnDef } from "@tanstack/react-table";
+import AppointmentAction from "../AppointmentAction";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -78,6 +79,17 @@ export const columns: ColumnDef<Appointment>[] = [
         <p>
           <span className="text-orange-500">PT</span>. {trainer?.name}
         </p>
+      );
+    },
+  },
+  {
+    id: "actions",
+    header: () => <div className="">Actions</div>,
+    cell: ({ row }) => {
+      return (
+        <div className="flex gap-1">
+          <AppointmentAction />
+        </div>
       );
     },
   },
