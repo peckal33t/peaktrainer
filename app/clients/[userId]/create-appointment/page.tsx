@@ -1,5 +1,6 @@
 import AppointmentForm from "@/components/forms/AppointmentForm";
 import { getClient } from "@/lib/service/client";
+import { SearchParamProps } from "@/types";
 import Link from "next/link";
 
 const AppointmentPage = async ({ params: { userId } }: SearchParamProps) => {

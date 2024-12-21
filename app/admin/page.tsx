@@ -1,20 +1,7 @@
-import { columns, Payment } from "@/components/table/columns";
+import { columns } from "@/components/table/columns";
 import { DataTable } from "@/components/table/DataTable";
 import { getAppointments } from "@/lib/service/client";
 import Link from "next/link";
-
-const getData: () => Promise<Payment[]> = async () => {
-  // Fetch data from your API here.
-  return [
-    {
-      id: "728ed52f",
-      amount: 100,
-      status: "pending",
-      email: "m@example.com",
-    },
-    // ...
-  ];
-};
 
 const AdminPage = async () => {
   const appointments = await getAppointments();

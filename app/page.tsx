@@ -1,5 +1,6 @@
 import ClientForm from "@/components/forms/ClientForm";
 import Skeleton from "@/components/Skeleton";
+import { SearchParamProps } from "@/types";
 import Link from "next/link";
 
 export default function Home({ searchParams }: SearchParamProps) {

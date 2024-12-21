@@ -1,4 +1,5 @@
 import { Models } from "node-appwrite";
+import { Gender, Status } from ".";
 
 export interface Client extends Models.Document {
   email: string;

@@ -3,6 +3,7 @@ import Link from "next/link";
 import successGif from "@/app/assets/images/success.gif";
 import { Button } from "@/components/ui/button";
 import { getUser } from "@/lib/service/client";
+import { SearchParamProps } from "@/types";
 
 const SuccessPage = async ({ params: { userId } }: SearchParamProps) => {
   const client = await getUser(userId);

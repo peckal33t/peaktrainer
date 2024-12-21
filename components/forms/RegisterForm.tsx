@@ -33,6 +33,7 @@ import {
 } from "../ui/select";
 import { Textarea } from "../ui/textarea";
 import { Checkbox } from "../ui/checkbox";
+import { Gender, RegisterUserParams, User } from "@/types";
 
 const formSchema = z.object({
   name: z.string().min(3, {

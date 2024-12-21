@@ -4,6 +4,13 @@ import { ID, Query } from "node-appwrite";
 import { appwriteDatabases, appwriteUsers } from "../db";
 import { parseStringify } from "../utilities";
 import { Appointment } from "@/types/db.types";
+import {
+  CreateAppointmentParams,
+  CreateUserParams,
+  RegisterUserParams,
+  UpdateAppointmentParams,
+} from "@/types";
+import { revalidatePath } from "next/cache";
 
 export const createUser = async (user: CreateUserParams) => {
   try {
@@ -112,6 +119,31 @@ export const getAppointments = async () => {
       ...counts,
       documents: appointments.documents,
     });
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const updateAppointment = async ({
+  appointmentId,
+  appointment,
+  userId,
+  type,
+}: UpdateAppointmentParams) => {
+  try {
+    const updateAppointment = await appwriteDatabases.updateDocument(
+      process.env.NEXT_PUBLIC_DATABASE_ID!,
+      process.env.NEXT_PUBLIC_APPOINTMENT_ID!,
+      appointmentId,
+      appointment
+    );
+
+    if (!updateAppointment) {
+      throw new Error("No appointment was found!");
+    }
+
+    revalidatePath("/admin");
+    return parseStringify(updateAppointment);
   } catch (error) {
     console.error(error);
   }

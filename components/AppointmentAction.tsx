@@ -11,17 +11,18 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "./ui/button";
 import { Appointment } from "@/types/db.types";
+import AppointmentForm from "./forms/AppointmentForm";
 
 const AppointmentAction = ({
   actionType,
   clientId,
   userId,
-  appointmentId,
+  appointment,
 }: {
-  actionType: "Schedule" | "Cancel";
+  actionType: "schedule" | "cancel";
   clientId: string;
   userId: string;
-  appointmentId?: Appointment;
+  appointment?: Appointment;
 }) => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -30,8 +31,8 @@ const AppointmentAction = ({
       <DialogTrigger asChild>
         <Button
           className={`${
-            actionType === "Schedule" ? "text-green-500" : "text-red-500"
-          }`}
+            actionType === "schedule" ? "text-green-500" : "text-red-500"
+          } capitalize`}
           variant="ghost"
         >
           {actionType}
@@ -39,12 +40,20 @@ const AppointmentAction = ({
       </DialogTrigger>
       <DialogContent className="shad-dialog sm:max-w-md">
         <DialogHeader className="mb-4 space-y-4">
-          <DialogTitle>{actionType} Appointment</DialogTitle>
+          <DialogTitle className="capitalize">
+            {actionType} Appointment
+          </DialogTitle>
           <DialogDescription>
-            This action cannot be undone. This will permanently delete your
-            account and remove your data from our servers.
+            Please confirm to {actionType} the appointment.
           </DialogDescription>
         </DialogHeader>
+        <AppointmentForm
+          userId={userId}
+          clientId={clientId}
+          type={actionType}
+          appointment={appointment}
+          setIsOpen={setIsOpen}
+        />
       </DialogContent>
     </Dialog>
   );

@@ -26,21 +26,30 @@ import { Calendar } from "lucide-react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { Textarea } from "../ui/textarea";
-import { createAppointment } from "@/lib/service/client";
+import { createAppointment, updateAppointment } from "@/lib/service/client";
 import {
   CreateSchema,
   ScheduleSchema,
   CancelSchema,
   getAppSchema,
 } from "@/lib/schema";
+import { Appointment } from "@/types/db.types";
 
 type AppointmentFormProps = {
   userId: string;
   clientId: string;
   type: "create" | "cancel" | "schedule";
+  appointment?: Appointment;
+  setIsOpen: (open: boolean) => void;
 };
 
-const AppointmentForm = ({ userId, clientId, type }: AppointmentFormProps) => {
+const AppointmentForm = ({
+  userId,
+  clientId,
+  type,
+  appointment,
+  setIsOpen,
+}: AppointmentFormProps) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -49,12 +58,14 @@ const AppointmentForm = ({ userId, clientId, type }: AppointmentFormProps) => {
   const form = useForm<z.infer<typeof CreateSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      trainerName: "",
-      appointmentDate: new Date(Date.now()),
-      trainingExperience: "",
-      additionalNotes: "",
-      trainingType: "",
-      cancellationReason: "",
+      trainerName: appointment ? appointment.trainerName : "",
+      appointmentDate: appointment
+        ? new Date(appointment.appointmentDate)
+        : new Date(),
+      trainingExperience: appointment ? appointment.trainingExperience : "",
+      additionalNotes: appointment ? appointment.additionalNotes : "",
+      trainingType: appointment?.trainingType,
+      cancellationReason: appointment ? appointment.cancellationReason : "",
     },
   });
 
@@ -74,25 +85,48 @@ const AppointmentForm = ({ userId, clientId, type }: AppointmentFormProps) => {
     }
 
     try {
-      const appData: any = {
-        userId,
-        client: clientId,
-        trainerName: values.trainerName,
-        appointmentDate: new Date(values.appointmentDate),
-        trainingExperience: values.trainingExperience,
-        additionalNotes: values.additionalNotes,
-        cancellationReason: values.cancellationReason,
-        trainingType: values.trainingType,
-        statusType,
-      };
+      if (type === "create") {
+        const appData: any = {
+          userId,
+          client: clientId,
+          trainerName: values.trainerName,
+          appointmentDate: new Date(values.appointmentDate),
+          trainingExperience: values.trainingExperience,
+          additionalNotes: values.additionalNotes,
+          cancellationReason: values.cancellationReason,
+          trainingType: values.trainingType,
+          statusType,
+        };
 
-      const appointment = await createAppointment(appData);
+        const appointment = await createAppointment(appData);
 
-      if (appointment) {
-        form.reset();
-        router.push(
-          `/clients/${userId}/create-appointment/success?appointmentId=${appointment.$id}`
-        );
+        if (appointment) {
+          form.reset();
+          router.push(
+            `/clients/${userId}/create-appointment/success?appointmentId=${appointment.$id}`
+          );
+        }
+      } else {
+        const appDataToUpdate: any = {
+          userId,
+          appointmentId: appointment?.$id!,
+          appointment: {
+            trainerName: values?.trainerName,
+            appointmentDate: new Date(values?.appointmentDate),
+            statusType,
+            cancellationReason: values?.cancellationReason,
+            additionalNotes: values?.additionalNotes,
+            trainingType: values?.trainingType,
+          },
+          type,
+        };
+
+        const updatedAppointment = await updateAppointment(appDataToUpdate);
+
+        if (updatedAppointment) {
+          setIsOpen && setIsOpen(false);
+          form.reset();
+        }
       }
     } catch (error) {
       console.error(error);
@@ -116,12 +150,15 @@ const AppointmentForm = ({ userId, clientId, type }: AppointmentFormProps) => {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 flex-1">
-        <section className="mb-12 space-y-4">
-          <h1 className="text-xl">Appointment</h1>
-          <p className="text-dark-700">
-            Create a new appointment with your preferred trainer.
-          </p>
-        </section>
+        {type === "create" && (
+          <section className="mb-12 space-y-4">
+            <h1 className="text-xl">Appointment</h1>
+            <p className="text-dark-700">
+              Create a new appointment with your preferred trainer.
+            </p>
+          </section>
+        )}
+
         <div className="space-y-4">
           {type !== "cancel" && (
             <>
@@ -222,7 +259,7 @@ const AppointmentForm = ({ userId, clientId, type }: AppointmentFormProps) => {
                   name="trainingExperience"
                   render={({ field }) => (
                     <FormItem className="flex-1">
-                      <FormLabel>Previous Training Experience</FormLabel>
+                      <FormLabel>Training Experience</FormLabel>
                       <FormControl>
                         <Textarea
                           placeholder="Describe your previous training or fitness experience"

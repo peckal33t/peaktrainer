@@ -1,5 +1,6 @@
 import RegisterForm from "@/components/forms/RegisterForm";
 import { getUser } from "@/lib/service/client";
+import { SearchParamProps } from "@/types";
 import Link from "next/link";
 
 const RegisterPage = async ({ params: { userId } }: SearchParamProps) => {
