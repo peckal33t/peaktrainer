@@ -6,15 +6,6 @@ import { Trainers } from "@/variables/variables";
 import { ColumnDef } from "@tanstack/react-table";
 import AppointmentAction from "../AppointmentAction";
 
-// This type is used to define the shape of our data.
-// You can use a Zod schema here if you want.
-export type Payment = {
-  id: string;
-  amount: number;
-  status: "pending" | "processing" | "success" | "failed";
-  email: string;
-};
-
 const statusColors: Record<string, string> = {
   scheduled: "text-green-500",
   pending: "text-blue-500",
@@ -84,11 +75,12 @@ export const columns: ColumnDef<Appointment>[] = [
   },
   {
     id: "actions",
-    header: () => <div className="">Actions</div>,
+    header: () => <div className="pl-4">Actions</div>,
     cell: ({ row }) => {
       return (
         <div className="flex gap-1">
-          <AppointmentAction />
+          <AppointmentAction actionType="Schedule" />
+          <AppointmentAction actionType="Cancel" />
         </div>
       );
     },
