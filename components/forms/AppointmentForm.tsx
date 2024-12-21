@@ -60,12 +60,12 @@ const AppointmentForm = ({
     defaultValues: {
       trainerName: appointment ? appointment.trainerName : "",
       appointmentDate: appointment
-        ? new Date(appointment.appointmentDate)
-        : new Date(),
+        ? new Date(appointment?.appointmentDate)
+        : new Date(Date.now()),
       trainingExperience: appointment ? appointment.trainingExperience : "",
-      additionalNotes: appointment ? appointment.additionalNotes : "",
+      additionalNotes: appointment?.additionalNotes || "",
       trainingType: appointment?.trainingType,
-      cancellationReason: appointment ? appointment.cancellationReason : "",
+      cancellationReason: appointment?.cancellationReason || "",
     },
   });
 
