@@ -22,15 +22,17 @@ const AppointmentAction = ({
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <Button
-          className={`${actionType === "Schedule" && "text-green-500"}`}
+          className={`${
+            actionType === "Schedule" ? "text-green-500" : "text-red-500"
+          }`}
           variant="ghost"
         >
           {actionType}
         </Button>
       </DialogTrigger>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Are you absolutely sure?</DialogTitle>
+      <DialogContent className="shad-dialog sm:max-w-md">
+        <DialogHeader className="mb-4 space-y-4">
+          <DialogTitle>{actionType} Appointment</DialogTitle>
           <DialogDescription>
             This action cannot be undone. This will permanently delete your
             account and remove your data from our servers.
