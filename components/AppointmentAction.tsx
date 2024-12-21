@@ -10,11 +10,18 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button } from "./ui/button";
+import { Appointment } from "@/types/db.types";
 
 const AppointmentAction = ({
   actionType,
+  clientId,
+  userId,
+  appointmentId,
 }: {
   actionType: "Schedule" | "Cancel";
+  clientId: string;
+  userId: string;
+  appointmentId?: Appointment;
 }) => {
   const [isOpen, setIsOpen] = useState(false);
 
