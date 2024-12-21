@@ -53,7 +53,9 @@ export const columns: ColumnDef<Appointment>[] = [
       const statusColor =
         statusColors[appointment.statusType] || "text-gray-500";
       return (
-        <p className={`capitalize ${statusColor}`}>{appointment.statusType}</p>
+        <p className={`capitalize ${statusColor} font-semibold`}>
+          {appointment.statusType}
+        </p>
       );
     },
   },
