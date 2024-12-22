@@ -11,6 +11,7 @@ import {
   UpdateAppointmentParams,
 } from "@/types";
 import { revalidatePath } from "next/cache";
+import { formatDateTime } from "../utilities";
 
 export const createUser = async (user: CreateUserParams) => {
   try {
@@ -132,6 +133,7 @@ export const updateAppointment = async ({
   appointment,
   userId,
   type,
+  timeZone,
 }: UpdateAppointmentParams) => {
   try {
     const updateAppointment = await appwriteDatabases.updateDocument(
@@ -144,6 +146,20 @@ export const updateAppointment = async ({
     if (!updateAppointment) {
       throw new Error("No appointment was found!");
     }
+
+    const message = `Hello from PeakTrainer! ${
+      type === "schedule"
+        ? `Your appointment has been successfully scheduled for ${
+            formatDateTime(appointment.appointmentDate!, timeZone).dateTime
+          } with PT. ${appointment.trainerName}.`
+        : `Unfortunately, your appointment set for ${
+            formatDateTime(appointment.appointmentDate!, timeZone).dateTime
+          } has been canceled. Cancellation reason: ${
+            appointment.cancellationReason
+          }.`
+    }`;
+
+    await smsNotification(userId, message);
 
     revalidatePath("/admin");
     return parseStringify(updateAppointment);

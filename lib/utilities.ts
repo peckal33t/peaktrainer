@@ -9,7 +9,10 @@ export const parseStringify = (value: any) => JSON.parse(JSON.stringify(value));
 
 export const convertFileToUrl = (file: File) => URL.createObjectURL(file);
 
-export const formatDateTime = (dateString: Date | string) => {
+export const formatDateTime = (
+  dateString: Date | string,
+  timeZone: string = Intl.DateTimeFormat().resolvedOptions().timeZone
+) => {
   const dateTimeOptions: Intl.DateTimeFormatOptions = {
     month: "short",
     day: "numeric",
@@ -17,6 +20,7 @@ export const formatDateTime = (dateString: Date | string) => {
     hour: "numeric",
     minute: "numeric",
     hour12: true,
+    timeZone: timeZone,
   };
 
   const dateDayOptions: Intl.DateTimeFormatOptions = {
@@ -24,18 +28,21 @@ export const formatDateTime = (dateString: Date | string) => {
     year: "numeric",
     month: "2-digit",
     day: "2-digit",
+    timeZone: timeZone,
   };
 
   const dateOptions: Intl.DateTimeFormatOptions = {
     month: "short",
     year: "numeric",
     day: "numeric",
+    timeZone: timeZone,
   };
 
   const timeOptions: Intl.DateTimeFormatOptions = {
     hour: "numeric",
     minute: "numeric",
     hour12: true,
+    timeZone: timeZone,
   };
 
   const formattedDateTime: string = new Date(dateString).toLocaleString(
