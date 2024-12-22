@@ -1,6 +1,5 @@
 import * as sdk from "node-appwrite";
 
-// Helper function to ensure environment variables are set
 const getEnvVariable = (key: string): string => {
   const value = process.env[key];
   if (!value) {
@@ -9,7 +8,6 @@ const getEnvVariable = (key: string): string => {
   return value;
 };
 
-// Appwrite Configuration
 const appwriteConfig = {
   endpoint: getEnvVariable("NEXT_PUBLIC_ENDPOINT"),
   projectId: getEnvVariable("NEXT_PUBLIC_PROJECT_ID"),
@@ -21,17 +19,14 @@ const appwriteConfig = {
   storageBucketId: getEnvVariable("NEXT_PUBLIC_BUCKET_STORAGE"),
 };
 
-// Appwrite Client Initialization
 const appwriteClient = new sdk.Client()
-  .setEndpoint(appwriteConfig.endpoint) // Ensure endpoint is accessible
-  .setProject(appwriteConfig.projectId) // Set project ID
-  .setKey(appwriteConfig.apiKey); // Set API key
+  .setEndpoint(appwriteConfig.endpoint)
+  .setProject(appwriteConfig.projectId)
+  .setKey(appwriteConfig.apiKey);
 
-// Export Appwrite Services
 export const appwriteDatabases = new sdk.Databases(appwriteClient);
 export const appwriteUsers = new sdk.Users(appwriteClient);
 export const appwriteStorage = new sdk.Storage(appwriteClient);
 export const appwriteMessaging = new sdk.Messaging(appwriteClient);
 
-// Optionally export the config object for debugging or external use
 export { appwriteConfig };

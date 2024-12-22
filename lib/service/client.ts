@@ -1,7 +1,7 @@
 "use server";
 
 import { ID, Query } from "node-appwrite";
-import { appwriteDatabases, appwriteUsers } from "../db";
+import { appwriteDatabases, appwriteMessaging, appwriteUsers } from "../db";
 import { parseStringify } from "../utilities";
 import { Appointment } from "@/types/db.types";
 import {
@@ -147,6 +147,21 @@ export const updateAppointment = async ({
 
     revalidatePath("/admin");
     return parseStringify(updateAppointment);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const smsNotification = async (userId: string, message: string) => {
+  try {
+    const sendMessage = await appwriteMessaging.createSms(
+      ID.unique(),
+      message,
+      [],
+      [userId]
+    );
+
+    return parseStringify(sendMessage);
   } catch (error) {
     console.error(error);
   }
