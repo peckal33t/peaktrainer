@@ -154,7 +154,9 @@ export const updateAppointment = async ({
           } with PT. ${appointment.trainerName}.`
         : `Unfortunately, your appointment set for ${
             formatDateTime(appointment.appointmentDate!, timeZone).dateTime
-          } has been canceled. Cancellation reason: ${
+          } with PT. ${
+            appointment.trainerName
+          } has been cancelled. Cancellation reason: ${
             appointment.cancellationReason
           }.`
     }`;
