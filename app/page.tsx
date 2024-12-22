@@ -3,8 +3,9 @@ import Skeleton from "@/components/Skeleton";
 import { SearchParamProps } from "@/types";
 import Link from "next/link";
 
-export default function Home({ searchParams }: SearchParamProps) {
-  const admin = searchParams.admin === "true";
+export default async function Home({ searchParams }: SearchParamProps) {
+  const params = await searchParams;
+  const admin = params.admin === "true";
 
   return (
     <div className="flex h-screen max-h-screen">
