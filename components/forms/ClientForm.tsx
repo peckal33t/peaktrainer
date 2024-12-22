@@ -26,6 +26,9 @@ const formSchema = z.object({
   email: z.string().email({
     message: "Please enter a valid email address.",
   }),
+  password: z.string().min(3, {
+    message: "Password must be at least 3 characters.",
+  }),
   phone: z
     .string()
     .refine(
@@ -43,6 +46,7 @@ const ClientForm = () => {
     defaultValues: {
       name: "",
       email: "",
+      password: "",
       phone: "",
     },
   });
@@ -54,6 +58,7 @@ const ClientForm = () => {
       const user = {
         name: values.name,
         email: values.email,
+        password: values.password,
         phone: values.phone,
       };
 
@@ -102,6 +107,25 @@ const ClientForm = () => {
                 <FormControl>
                   <Input
                     placeholder="Your email"
+                    {...field}
+                    className="form-input shad-input border-0"
+                  />
+                </FormControl>
+                <FormMessage className="shad-error" />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="password"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Password</FormLabel>
+                <FormControl>
+                  <Input
+                    type="password"
+                    placeholder="Your password"
                     {...field}
                     className="form-input shad-input border-0"
                   />
