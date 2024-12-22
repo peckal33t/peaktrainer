@@ -77,12 +77,18 @@ const formSchema = z.object({
   fitnessGoals: z.string().max(100, {
     message: "Fitness goals cannot exceed 100 characters.",
   }),
-  agreeTerms: z.boolean().refine((value) => value === true, {
-    message: "You must agree to the terms and conditions.",
-  }),
-  acknowledgePolicy: z.boolean().refine((value) => value === true, {
-    message: "You must acknowledge the privacy policy.",
-  }),
+  agreeTerms: z
+    .boolean()
+    .default(false)
+    .refine((value) => value === true, {
+      message: "You must agree to the terms and conditions.",
+    }),
+  acknowledgePolicy: z
+    .boolean()
+    .default(false)
+    .refine((value) => value === true, {
+      message: "You must acknowledge the privacy policy.",
+    }),
 });
 
 const RegisterForm = ({ user }: { user: User }) => {
