@@ -5,18 +5,15 @@ import { useEffect, useState } from "react";
 import {
   AlertDialog,
   AlertDialogAction,
-  AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import {
   InputOTP,
   InputOTPGroup,
-  InputOTPSeparator,
   InputOTPSlot,
 } from "@/components/ui/input-otp";
 import { X } from "lucide-react";
@@ -31,21 +28,34 @@ const Skeleton = () => {
 
   const isAuthorizationKey =
     typeof window !== "undefined"
-      ? window.localStorage.getItem("authorizationKey")
+      ? localStorage.getItem("authorizationKey")
+      : null;
+
+  const isAuthorizationTimestamp =
+    typeof window !== "undefined"
+      ? localStorage.getItem("authorizationTimestamp")
       : null;
 
   useEffect(() => {
     const decrypt = isAuthorizationKey && decryptKey(isAuthorizationKey);
+    const timestamp = isAuthorizationTimestamp
+      ? parseInt(isAuthorizationTimestamp, 10)
+      : null;
+    const now = Date.now();
 
-    if (path) {
-      if (decrypt === process.env.NEXT_PUBLIC_AUTHORIZATION_CODE) {
+    if (decrypt === process.env.NEXT_PUBLIC_AUTHORIZATION_CODE) {
+      if (timestamp && now - timestamp <= 30 * 60 * 1000) {
         setIsOpen(false);
         router.push("/admin");
       } else {
+        localStorage.removeItem("authorizationKey");
+        localStorage.removeItem("authorizationTimestamp");
         setIsOpen(true);
       }
+    } else {
+      setIsOpen(true);
     }
-  }, [isAuthorizationKey]);
+  }, [isAuthorizationKey, isAuthorizationTimestamp]);
 
   const closePopUp = () => {
     setIsOpen(false);
@@ -57,6 +67,7 @@ const Skeleton = () => {
       const key = encryptKey(secretKey);
 
       localStorage.setItem("authorizationKey", key);
+      localStorage.setItem("authorizationTimestamp", Date.now().toString());
 
       setIsOpen(false);
       router.push("/admin");
@@ -81,7 +92,7 @@ const Skeleton = () => {
               width={20}
               height={20}
               className="cursor-pointer"
-              onClick={() => closePopUp()}
+              onClick={closePopUp}
             />
           </AlertDialogTitle>
           <AlertDialogDescription>
