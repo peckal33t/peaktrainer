@@ -45,6 +45,9 @@ const formSchema = z.object({
   email: z.string().email({
     message: "Please enter a valid email address.",
   }),
+  password: z.string().min(3, {
+    message: "Password must be at least 3 characters.",
+  }),
   phone: z
     .string()
     .refine(
@@ -93,6 +96,7 @@ const RegisterForm = ({ user }: { user: User }) => {
       address: "",
       email: "",
       phone: "",
+      password: "",
       kg: "",
       height: "",
       birthDate: new Date(Date.now()),
@@ -116,6 +120,7 @@ const RegisterForm = ({ user }: { user: User }) => {
         name: values.name,
         email: values.email,
         phone: values.phone,
+        password: values.password,
         address: values.address,
         kg: values.kg,
         height: values.height,
@@ -255,6 +260,25 @@ const RegisterForm = ({ user }: { user: User }) => {
               />
             </div>
             <div className="space-y-4">
+              <FormField
+                control={form.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Password</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="password"
+                        placeholder="Your password"
+                        {...field}
+                        className="form-input shad-input border-0"
+                      />
+                    </FormControl>
+                    <FormMessage className="shad-error" />
+                  </FormItem>
+                )}
+              />
+
               <FormField
                 control={form.control}
                 name="address"

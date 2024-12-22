@@ -26,6 +26,7 @@ declare interface RegisterUserParams extends CreateUserParams {
   height: string;
   birthDate: string;
   primaryTrainer: string;
+  password: string;
   agreement: boolean;
 }
 
