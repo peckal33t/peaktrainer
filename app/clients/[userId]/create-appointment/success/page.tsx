@@ -5,7 +5,8 @@ import { Button } from "@/components/ui/button";
 import { getUser } from "@/lib/service/client";
 import { SearchParamProps } from "@/types";
 
-const SuccessPage = async ({ params: { userId } }: SearchParamProps) => {
+const SuccessPage = async ({ params }: SearchParamProps) => {
+  const userId = params.userId;
   const client = await getUser(userId);
 
   return (

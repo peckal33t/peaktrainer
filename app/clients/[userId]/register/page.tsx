@@ -3,7 +3,8 @@ import { getUser } from "@/lib/service/client";
 import { SearchParamProps } from "@/types";
 import Link from "next/link";
 
-const RegisterPage = async ({ params: { userId } }: SearchParamProps) => {
+const RegisterPage = async ({ params }: SearchParamProps) => {
+  const userId = params.userId;
   const user = await getUser(userId);
 
   return (
