@@ -150,6 +150,12 @@ const RegisterForm = ({ user }: { user: User }) => {
 
   return (
     <div className="max-w-[496px] sub-container">
+      <section className="mb-12 space-y-4">
+        <h1 className="text-xl">Registration</h1>
+        <p className="text-dark-700">
+          Please provide all the information to complete your registration
+        </p>
+      </section>
       <h1 className="text-lg">Personal Information</h1>
       <br />
       <Form {...form}>
