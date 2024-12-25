@@ -29,7 +29,6 @@ export const createUser = async (user: CreateUserParams) => {
       const existingUser = await appwriteUsers.list([
         Query.equal("email", [user.email]),
       ]);
-      console.log("Existing user found:", existingUser);
       return existingUser.users[0];
     }
 
