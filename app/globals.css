@@ -82,7 +82,7 @@
   }
 
   .admin-header {
-    @apply sticky top-3 z-20 mx-3 flex items-center justify-between rounded-2xl px-[5%] py-5 xl:px-12;
+    @apply top-3 z-20 mx-3 flex items-center justify-between rounded-2xl px-[5%] py-5 xl:px-12;
   }
 
   .admin-main {
