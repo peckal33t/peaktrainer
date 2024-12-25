@@ -12,7 +12,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import CustomButton from "../CustomButton";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   Select,
@@ -40,7 +40,7 @@ type AppointmentFormProps = {
   clientId: string;
   type: "create" | "cancel" | "schedule";
   appointment?: Appointment;
-  setIsOpen: (open: boolean) => void;
+  setIsOpen?: Dispatch<SetStateAction<boolean>>;
 };
 
 const AppointmentForm = ({
