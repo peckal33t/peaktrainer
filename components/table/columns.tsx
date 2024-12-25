@@ -18,7 +18,7 @@ export const columns: ColumnDef<Appointment>[] = [
     header: "Client",
     cell: ({ row }) => {
       const appointment = row.original;
-      return <p>{appointment.client.name}</p>;
+      return <p>{appointment.client?.name || "Unknown Client"}</p>;
     },
   },
   {
@@ -26,7 +26,7 @@ export const columns: ColumnDef<Appointment>[] = [
     header: "Phone",
     cell: ({ row }) => {
       const appointment = row.original;
-      return <p>{appointment.client.phone}</p>;
+      return <p>{appointment.client?.phone || "Unknown"}</p>;
     },
   },
   {
@@ -34,7 +34,7 @@ export const columns: ColumnDef<Appointment>[] = [
     header: "Email",
     cell: ({ row }) => {
       const appointment = row.original;
-      return <p>{appointment.client.email}</p>;
+      return <p>{appointment.client?.email || "Unknown"}</p>;
     },
   },
   {
@@ -56,7 +56,13 @@ export const columns: ColumnDef<Appointment>[] = [
     header: "Appointment Date",
     cell: ({ row }) => {
       const appointment = row.original;
-      return <p>{formatDateTime(appointment.appointmentDate).dateTime}</p>;
+      return (
+        <p>
+          {appointment.appointmentDate
+            ? formatDateTime(appointment.appointmentDate).dateTime
+            : "Unknown"}
+        </p>
+      );
     },
   },
   {
@@ -68,7 +74,8 @@ export const columns: ColumnDef<Appointment>[] = [
       );
       return (
         <p>
-          <span className="text-orange-500">PT</span>. {trainer?.name}
+          <span className="text-orange-500">PT</span>.{" "}
+          {trainer?.name || "Unknown"}
         </p>
       );
     },
@@ -76,20 +83,24 @@ export const columns: ColumnDef<Appointment>[] = [
   {
     id: "actions",
     header: () => <div className="pl-4">Actions</div>,
-    cell: ({ row: { original: index } }) => {
+    cell: ({ row: { original: appointment } }) => {
+      const isClientUnknown = !appointment.client?.$id;
+
       return (
         <div className="flex gap-1">
           <AppointmentAction
             actionType="schedule"
-            clientId={index.client.$id}
-            userId={index.userId}
-            appointment={index}
+            clientId={appointment.client?.$id || ""}
+            userId={appointment.userId}
+            appointment={appointment}
+            disabled={isClientUnknown}
           />
           <AppointmentAction
             actionType="cancel"
-            clientId={index.client.$id}
-            userId={index.userId}
-            appointment={index}
+            clientId={appointment.client?.$id || ""}
+            userId={appointment.userId}
+            appointment={appointment}
+            disabled={isClientUnknown}
           />
         </div>
       );

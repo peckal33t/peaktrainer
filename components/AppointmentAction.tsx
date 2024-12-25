@@ -18,11 +18,13 @@ const AppointmentAction = ({
   clientId,
   userId,
   appointment,
+  disabled = false,
 }: {
   actionType: "schedule" | "cancel";
   clientId: string;
   userId: string;
   appointment?: Appointment;
+  disabled?: boolean;
 }) => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -30,31 +32,34 @@ const AppointmentAction = ({
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <Button
-          className={`${
+          className={`capitalize ${
             actionType === "schedule" ? "text-green-500" : "text-red-500"
-          } capitalize`}
+          }`}
           variant="ghost"
+          disabled={disabled}
         >
           {actionType}
         </Button>
       </DialogTrigger>
-      <DialogContent className="shad-dialog sm:max-w-md">
-        <DialogHeader className="mb-4 space-y-4">
-          <DialogTitle className="capitalize">
-            {actionType} Appointment
-          </DialogTitle>
-          <DialogDescription>
-            Please confirm to {actionType} the appointment.
-          </DialogDescription>
-        </DialogHeader>
-        <AppointmentForm
-          userId={userId}
-          clientId={clientId}
-          type={actionType}
-          appointment={appointment}
-          setIsOpen={setIsOpen}
-        />
-      </DialogContent>
+      {!disabled && (
+        <DialogContent className="shad-dialog sm:max-w-md">
+          <DialogHeader className="mb-4 space-y-4">
+            <DialogTitle className="capitalize">
+              {actionType} Appointment
+            </DialogTitle>
+            <DialogDescription>
+              Please confirm to {actionType} the appointment.
+            </DialogDescription>
+          </DialogHeader>
+          <AppointmentForm
+            userId={userId}
+            clientId={clientId}
+            type={actionType}
+            appointment={appointment}
+            setIsOpen={setIsOpen}
+          />
+        </DialogContent>
+      )}
     </Dialog>
   );
 };
