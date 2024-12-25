@@ -154,7 +154,7 @@ const AppointmentForm = ({
           <section className="mb-12 space-y-4">
             <h1 className="text-xl">Appointment</h1>
             <p className="text-dark-700">
-              Create a new appointment with your preferred trainer.
+              Create a new appointment with your preferred trainer
             </p>
           </section>
         )}
